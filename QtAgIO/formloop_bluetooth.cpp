@@ -2,11 +2,6 @@
 #include <QBluetoothDeviceDiscoveryAgent>
 #include <QBluetoothSocket>
 
-
-using namespace Qt::StringLiterals;
-
-static constexpr auto serviceUuid = "e8e10f95-1a70-4b27-9ccf-02010264e9c8"_L1;
-
 void FormLoop::startBluetoothDiscovery(){
     // Create a discovery agent and connect to its signals
     QBluetoothDeviceDiscoveryAgent *discoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
