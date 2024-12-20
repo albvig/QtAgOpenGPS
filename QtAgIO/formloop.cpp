@@ -6,7 +6,6 @@
 #include "qmlsettings.h"
 
 extern QMLSettings qml_settings;
-
 FormLoop::FormLoop(QObject *parent) : QObject(parent),
     qml_root(parent),
     wwwNtrip("192.168.1.100", 2101, 2102), // Example initial values

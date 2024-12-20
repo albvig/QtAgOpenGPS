@@ -331,8 +331,10 @@ class FormLoop : public QObject
 
         //Bluetooth
         void bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device);
+        void bluetoothConnected();
     private:
         void startBluetoothDiscovery();
+        void connectToBluetoothDevice(const QBluetoothDeviceInfo &device);
 };
 
 
