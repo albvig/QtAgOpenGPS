@@ -48,7 +48,7 @@ void FormLoop::readBluetoothData(){
     QByteArray data = bluetoothSocket->readAll();
     qDebug() << "Received data: " << data;
     //btNMEABuffer += QString::fromLatin1(data);
-    rawBuffer += QString::fromLatin1(data);
+    btRawBuffer += QString::fromLatin1(data);
     //qDebug() << rawBuffer;
-    ParseNMEA(rawBuffer);
+    ParseNMEA(btRawBuffer);
 }
