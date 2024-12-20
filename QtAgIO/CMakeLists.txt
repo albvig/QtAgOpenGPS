@@ -25,6 +25,7 @@ qt_add_executable(QtAgIO
     formloop_ntripcomm.cpp
     formloop_ui.cpp
     formloop_settings.cpp
+    formloop_bluetooth.cpp
     properties.h
     qmlsettings.h qmlsettings.cpp
     qmlsettings_addkeys.cpp
@@ -52,6 +53,9 @@ target_include_directories(QtAgIO
     PRIVATE .
 )
 
+#this is needed by QtAgIO only
+find_package(Qt6 REQUIRED COMPONENTS Bluetooth)
+
 # Libraries to link
 target_link_libraries(QtAgIO PRIVATE
     Qt6::Core
@@ -61,6 +65,7 @@ target_link_libraries(QtAgIO PRIVATE
     Qt6::Quick
     Qt6::QuickWidgets
     Qt6::Multimedia
+    Qt6::Bluetooth
 )
 
 target_compile_options(QtAgIO PRIVATE 

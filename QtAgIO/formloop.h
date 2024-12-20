@@ -19,6 +19,7 @@
 #include <QQueue>
 #include <QDateTime>
 #include <QElapsedTimer>
+#include <QBluetoothDeviceInfo>
 
 
 class FormUDP;
@@ -327,6 +328,11 @@ class FormLoop : public QObject
     private slots:
         void ConfigureNTRIP();
         void NTRIPDebugMode(bool doWeDebug);
+
+        //Bluetooth
+        void bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device);
+    private:
+        void startBluetoothDiscovery();
 };
 
 
