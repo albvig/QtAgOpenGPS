@@ -20,6 +20,7 @@
 #include <QDateTime>
 #include <QElapsedTimer>
 #include <QBluetoothDeviceInfo>
+#include <QBluetoothSocket>
 
 
 class FormUDP;
@@ -332,7 +333,9 @@ class FormLoop : public QObject
         //Bluetooth
         void bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device);
         void bluetoothConnected();
+        void readBluetoothData();
     private:
+        QBluetoothSocket *bluetoothSocket;
         void startBluetoothDiscovery();
         void connectToBluetoothDevice(const QBluetoothDeviceInfo &device);
 };

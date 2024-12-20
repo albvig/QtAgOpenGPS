@@ -31,12 +31,24 @@ void FormLoop::connectToBluetoothDevice(const QBluetoothDeviceInfo &device){
 
     qDebug() << "Attempting to connect to ";
     qDebug() << address << " " << uuid;
-    QBluetoothSocket *bluetoothSocket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol, this);
+    bluetoothSocket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol, this);
 
     connect(bluetoothSocket, SIGNAL(connected()), this, SLOT(bluetoothConnected()));
+
+    connect(bluetoothSocket, SIGNAL(readyRead()), this, SLOT(readBluetoothData()));
     bluetoothSocket->connectToService(address, uuid, QIODeviceBase::ReadOnly);
 }
 
 void FormLoop::bluetoothConnected(){
     qDebug() << "Connected to bluetooth device!";
+    qDebug() << "Waiting for incoming data...";
+}
+
+void FormLoop::readBluetoothData(){
+    QByteArray data = bluetoothSocket->readAll();
+    qDebug() << "Received data: " << data;
+    //btNMEABuffer += QString::fromLatin1(data);
+    rawBuffer += QString::fromLatin1(data);
+    //qDebug() << rawBuffer;
+    ParseNMEA(rawBuffer);
 }
