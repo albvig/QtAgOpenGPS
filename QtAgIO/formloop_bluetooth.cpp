@@ -7,6 +7,7 @@ void FormLoop::startBluetoothDiscovery(){
     QBluetoothDeviceDiscoveryAgent *discoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
     connect(discoveryAgent, SIGNAL(deviceDiscovered(QBluetoothDeviceInfo)),
             this, SLOT(bluetoothDeviceDiscovered(QBluetoothDeviceInfo)));
+    connect(discoveryAgent, SIGNAL(finished()), this, SLOT(bluetoothDiscoveryFinished()));
 
     // Start a discovery
     discoveryAgent->start();
@@ -51,4 +52,8 @@ void FormLoop::readBluetoothData(){
     btRawBuffer += QString::fromLatin1(data);
     //qDebug() << rawBuffer;
     ParseNMEA(btRawBuffer);
+}
+
+void FormLoop::bluetoothDiscoveryFinished(){
+    qDebug() << "Bluetooth Discovery finished";
 }
