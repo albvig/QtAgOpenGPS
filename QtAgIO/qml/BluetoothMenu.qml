@@ -17,7 +17,7 @@ Window{
         anchors.top: parent.top
         height: 50
         onClicked: {
-            if(settings.setBluetooth_isOn === false)
+            if(utils.isTrue(settings.setBluetooth_isOn) === false)
                 settings.setBluetooth_isOn = true
             agio.bt_search()
         }
