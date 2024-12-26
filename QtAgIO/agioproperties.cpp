@@ -25,5 +25,5 @@ AgIOProperty property_setNTRIP_isHTTP10("comm/ntripIsHTTP10", false);
 AgIOProperty property_setNTRIP_ipAddress("comm/ntripIpAddress", "127.0.0.1");
 AgIOProperty property_setNTRIP_url("comm/ntripURL", "test.test");
 AgIOProperty property_setRun_isFirstRun("run/isFirstRun", true);
-AgIOProperty property_bluetooth_isOn("bluetooth/isOn", false);
+AgIOProperty property_setBluetooth_isOn("bluetooth/isOn", false);
 
