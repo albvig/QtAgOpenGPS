@@ -11,6 +11,7 @@
 #include <QHostInfo>
 #include <QDir>
 #include "agioproperty.h"
+#include "bluetoothdevicelist.h"
 
 extern QMLSettings qml_settings;
 
@@ -18,6 +19,8 @@ void FormLoop::setupGUI()
 {
     //Load the QML UI and display it in the main area of the GUI
     setProperty("title", "QtAgIO");
+
+    qmlRegisterType<BluetoothDeviceList>("org.agopengps.bluetooth", 1, 0, "BluetoothDeviceList");
 
 //tell the QML what OS we are using
 #ifdef __ANDROID__
