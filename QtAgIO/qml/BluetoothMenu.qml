@@ -16,8 +16,19 @@ Window{
         anchors.margins: 10
         anchors.top: parent.top
         height: 50
-        onClicked: agio.bt_search()
+        onClicked: {
+            if(settings.setBluetooth_isOn === false)
+                settings.setBluetooth_isOn = true
+            agio.bt_search()
+        }
         text: qsTr("Search")
         width: 250
+
+        Connections {
+            target: agio
+            function onSearchingForBluetoothChanged(){
+                search.text = agio.searchingForBluetooth ? qsTr("Searching") : qsTr("Search")
+            }
+        }
     }
 }
