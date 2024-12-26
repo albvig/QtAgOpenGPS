@@ -75,5 +75,9 @@ Item {
     //advanced Menu triggers
     signal btnUDPListenOnly_clicked(bool isIt);
 
+    //bluetooth
+    signal bt_search()
+    property bool searchingForBluetooth: false
+
 }
 

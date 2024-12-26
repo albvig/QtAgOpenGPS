@@ -331,11 +331,14 @@ class FormLoop : public QObject
         void bluetoothConnected();
         void readBluetoothData();
         void bluetoothDiscoveryFinished();
+
+        void startBluetoothDiscovery();
     private:
         QBluetoothSocket *bluetoothSocket;
         QString btRawBuffer;
-        void startBluetoothDiscovery();
         void connectToBluetoothDevice(const QBluetoothDeviceInfo &device);
+
+        bool searchingForBluetooth = false;
 };
 
 
