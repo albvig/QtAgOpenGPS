@@ -98,10 +98,6 @@ public:
     int FindClosestRefTrack(Vec3 pivot, const CVehicle &vehicle);
     void SwitchToClosestRefTrack(Vec3 pivot, const CVehicle &vehicle);
 
-    void NudgeTrack(double dist);
-    void NudgeDistanceReset();
-    void SnapToPivot();
-    void NudgeRefTrack(double dist);
     void NudgeRefABLine(CTrk &track, double dist);
     void NudgeRefCurve(CTrk &track, double distAway);
 
@@ -166,6 +162,11 @@ public slots:
         endResetModel();
         emit modelChanged(); //not sure if this is necessary
     }
+    //put these here so Qt can call them directly.
+    void NudgeTrack(double dist);
+    void NudgeDistanceReset();
+    void SnapToPivot();
+    void NudgeRefTrack(double dist);
 
 private:
     // Used by QML model interface

@@ -642,6 +642,8 @@ public slots:
 
     void TimedMessageBox(int timeout, QString s1, QString s2);
 
+    //Tracks GUI
+
     void tracks_start_new(int mode);
 
     void tracks_mark_start(double easting,
@@ -653,10 +655,19 @@ public slots:
 
     void tracks_finish_new(QString name);
 
+    void tracks_cancel_new();
+    void tracks_pause(bool pause);
+    void tracks_add_point(double easting, double northing, double heading);
+
     void tracks_select(int index);
     void tracks_delete(int index);
     void tracks_changeName(int index, QString new_name);
     void tracks_swapAB(int index);
+
+    void tracks_ref_nudge(double dist_m);
+    void tracks_nudge_zero();
+    void tracks_nudge_center();
+    void tracks_nudge(double dist_m);
 
     /*
     //AB Lines in GUI. TODO: rename these, make them consistent

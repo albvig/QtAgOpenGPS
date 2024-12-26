@@ -203,11 +203,58 @@ void FormGPS::tracks_finish_new(QString name)
     trk.reloadModel();
 
 }
+
+void FormGPS::tracks_cancel_new()
+{
+    trk.ABLine.isMakingABLine = false;
+    trk.curve.isMakingCurve = false;
+    if(trk.newTrack.mode == TrackMode::Curve) {
+        trk.curve.desList.clear();
+    }
+    trk.newTrack.mode = 0;
+
+    //don't need to do anything else
+}
+
+void FormGPS::tracks_pause(bool pause)
+{
+    if (trk.newTrack.mode == TrackMode::Curve) {
+        //turn off isMakingCurve when paused, or turn it on
+        //when unpausing
+        trk.curve.isMakingCurve = !pause;
+    }
+}
+
+void FormGPS::tracks_add_point(double easting, double northing, double heading)
+{
+    trk.AddPathPoint(Vec3(easting, northing, heading));
+}
+
+void FormGPS::tracks_ref_nudge(double dist_m)
+{
+    trk.NudgeRefTrack(dist_m);
+}
+
+void FormGPS::tracks_nudge_zero()
+{
+    trk.NudgeDistanceReset();
+}
+
+void FormGPS::tracks_nudge_center()
+{
+    trk.SnapToPivot();
+}
+
+void FormGPS::tracks_nudge(double dist_m)
+{
+    trk.NudgeTrack(dist_m);
+}
+
     /*
 void FormGPS::update_current_ABline_from_qml()
 {
     //AOGInterface currentABLine property changed; sync our
-    //local ABLine.numABLineSelected with it.
+ 0   //local ABLine.numABLineSelected with it.
 
     QObject *aog = qmlItem(qml_root, "aog"); //TODO save this in formgps.h
 

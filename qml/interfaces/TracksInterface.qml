@@ -21,12 +21,14 @@ Item {
 
     //modes:
     //AB=2, Curve = 4, waterPivot = 64
-    signal tracks_start_new(int mode, double easting, double northing, double heading)
-
+    signal tracks_start_new(int mode)
+    signal tracks_mark_start(double easting, double northing, double heading)
     //ref_side is negative for left, positive for right, zero for centered
-    signal tracks_finish_new(int mode, string name, int ref_side, double easting, double northing, double heading)
-    signal tracks_cancel_new(int mode)
+    signal tracks_mark_end(double easting, double northing)
+    signal tracks_finish_new(string name)
+    signal tracks_cancel_new()
     signal tracks_pause_or_resume(bool pause)
+    signal tracks_add_point(double easting, double northing, double heading)
 
     signal tracks_select(int index)
     signal tracks_swapAB(int index)
@@ -35,5 +37,11 @@ Item {
 
     signal tracks_updateModel()
 
+    //offset and nudge signals
+    signal ref_nudge(double dist_m) //negative left, positive right
+
+    signal nudge_zero()
+    signal nudge_center()
+    signal nudge(double dist_m)
 
 }
