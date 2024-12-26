@@ -642,13 +642,16 @@ public slots:
 
     void TimedMessageBox(int timeout, QString s1, QString s2);
 
-    void tracks_start_new(int mode,
-                          double easting,
+    void tracks_start_new(int mode);
+
+    void tracks_mark_start(double easting,
                           double northing,
                           double heading);
 
-    void tracks_create_new(int mode, int ref_side, double Beasting,
-                           double Bnorthing);
+    void tracks_mark_end(int refSide, double easting,
+                           double northing);
+
+    void tracks_finish_new(QString name);
 
     void tracks_select(int index);
     void tracks_delete(int index);

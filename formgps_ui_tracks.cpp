@@ -10,10 +10,10 @@
 void FormGPS::tracks_select(int index)
 {
     //reset to generate new reference
-    curve.isCurveValid = false;
-    curve.lastHowManyPathsAway = 98888;
-    ABLine.isABValid = false;
-    curve.desList.clear();
+    trk.curve.isCurveValid = false;
+    trk.curve.lastHowManyPathsAway = 98888;
+    trk.ABLine.isABValid = false;
+    trk.curve.desList.clear();
 
     FileSaveTracks();
 
@@ -23,116 +23,172 @@ void FormGPS::tracks_select(int index)
     yt.ResetCreatedYouTurn(makeUTurnCounter);
 }
 
-void FormGPS::tracks_start_new(int mode, double easting, double northing, double heading)
+void FormGPS::tracks_start_new(int mode)
 {
-    switch(mode) {
+    trk.newTrack = CTrk();
+    trk.setNewMode((TrackMode)mode);
+    trk.setNewName("");
+}
+
+void FormGPS::tracks_mark_start(double easting, double northing, double heading)
+{
+    //mark "A" location for AB Line or AB curve, or center for waterPivot
+    switch(trk.getNewMode()) {
     case TrackMode::AB:
-        curve.desList.clear();
-        ABLine.isMakingABLine = true;
-        ABLine.desPtA.easting = easting;
-        ABLine.desPtA.northing = northing;
+        trk.curve.desList.clear();
+        trk.ABLine.isMakingABLine = true;
+        trk.ABLine.desPtA.easting = easting;
+        trk.ABLine.desPtA.northing = northing;
 
-        ABLine.desLineEndA.easting = ABLine.desPtA.easting - (sin(vehicle.pivotAxlePos.heading) * 1000);
-        ABLine.desLineEndA.northing = ABLine.desPtA.northing - (cos(vehicle.pivotAxlePos.heading) * 1000);
+        trk.ABLine.desLineEndA.easting = trk.ABLine.desPtA.easting - (sin(heading) * 1000);
+        trk.ABLine.desLineEndA.northing = trk.ABLine.desPtA.northing - (cos(heading) * 1000);
 
-        ABLine.desLineEndB.easting = ABLine.desPtA.easting + (sin(vehicle.pivotAxlePos.heading) * 1000);
-        ABLine.desLineEndB.northing = ABLine.desPtA.northing + (cos(vehicle.pivotAxlePos.heading) * 1000);
+        trk.ABLine.desLineEndB.easting = trk.ABLine.desPtA.easting + (sin(heading) * 1000);
+        trk.ABLine.desLineEndB.northing = trk.ABLine.desPtA.northing + (cos(heading) * 1000);
 
         break;
 
     case TrackMode::Curve:
-        curve.desList.clear();
-        curve.isMakingCurve = true;
+        trk.curve.desList.clear();
+        trk.curve.isMakingCurve = true;
         break;
 
     case TrackMode::waterPivot:
-        //nothing to do here.
+        //record center
+        trk.newTrack.ptA.easting = easting;
+        trk.newTrack.ptA.northing = northing;
+        trk.setNewName("Piv");
+
     default:
         return;
     }
 }
 
-void FormGPS::tracks_finish_new(int mode, QString name, int ref_side, double easting, double northing, double heading)
+void FormGPS::tracks_mark_end(int refSide, double easting, double northing)
 {
-    double aveLineHeading = 0;
-    int idx;
+    //mark "B" location for AB Line or AB curve, or NOP for waterPivot
     int cnt;
+    double aveLineHeading = 0;
+    trk.newRefSide = refSide;
 
-    switch(mode) {
+    switch(trk.getNewMode()) {
     case TrackMode::AB:
-       break;
+        trk.newTrack.ptB.easting = easting;
+        trk.newTrack.ptB.northing = northing;
+
+        trk.ABLine.desHeading = atan2(easting - trk.ABLine.desPtA.easting,
+                                  northing - trk.ABLine.desPtA.northing);
+        if (trk.ABLine.desHeading < 0) trk.ABLine.desHeading += glm::twoPI;
+
+        trk.newTrack.heading = trk.ABLine.desHeading;
+
+        trk.setNewName("AB " + locale.toString(glm::toDegrees(trk.ABLine.desHeading), 'g', 1) + QChar(0x00B0));
+
+        //after we're sure we want this, we'll shift it over
+        break;
 
     case TrackMode::Curve:
-        curve.isMakingCurve = false;
+        trk.newTrack.curvePts.clear();
 
-        cnt = curve.desList.count();
+        cnt = trk.curve.desList.count();
         if (cnt > 3)
         {
             //make sure point distance isn't too big
-            curve.MakePointMinimumSpacing(curve.desList, 1.6);
-            curve.CalculateHeadings(curve.desList);
+            trk.curve.MakePointMinimumSpacing(trk.curve.desList, 1.6);
+            trk.curve.CalculateHeadings(trk.curve.desList);
 
-            trk.gArr.append(CTrk());
-            //array number is 1 less since it starts at zero
-            idx = trk.gArr.count() - 1;
-
-            trk.gArr[idx].ptA = Vec2(curve.desList[0].easting,
-                                     curve.desList[0].northing);
-            trk.gArr[idx].ptB = Vec2(curve.desList[curve.desList.count() - 1].easting,
-                                     curve.desList[curve.desList.count() - 1].northing);
-
-            trk.gArr[idx].mode = TrackMode::Curve;
+            trk.newTrack.ptA = Vec2(trk.curve.desList[0].easting,
+                                     trk.curve.desList[0].northing);
+            trk.newTrack.ptB = Vec2(trk.curve.desList[trk.curve.desList.count() - 1].easting,
+                                     trk.curve.desList[trk.curve.desList.count() - 1].northing);
 
             //calculate average heading of line
             double x = 0, y = 0;
-            for (Vec3 &pt : curve.desList)
+            for (Vec3 &pt : trk.curve.desList)
             {
                 x += cos(pt.heading);
                 y += sin(pt.heading);
             }
-            x /= curve.desList.count();
-            y /= curve.desList.count();
+            x /= trk.curve.desList.count();
+            y /= trk.curve.desList.count();
             aveLineHeading = atan2(y, x);
             if (aveLineHeading < 0) aveLineHeading += glm::twoPI;
 
-            trk.gArr[idx].heading = aveLineHeading;
+            trk.newTrack.heading = aveLineHeading;
 
             //build the tail extensions
-            curve.AddFirstLastPoints(curve.desList,bnd);
-            curve.SmoothABDesList(4);
-            curve.CalculateHeadings(curve.desList);
+            trk.curve.AddFirstLastPoints(trk.curve.desList,bnd);
+            trk.curve.SmoothABDesList(4);
+            trk.curve.CalculateHeadings(trk.curve.desList);
 
             //write out the Curve Points
-            for (Vec3 &item : curve.desList)
+            for (Vec3 &item : trk.curve.desList)
             {
-                trk.gArr[idx].curvePts.append(item);
+                trk.newTrack.curvePts.append(item);
             }
 
-            curve.desName = "Cu " + locale.toString(glm::toDegrees(aveLineHeading), 'g', 1) + QChar(0x00B0);
+            trk.setNewName("Cu " + locale.toString(glm::toDegrees(aveLineHeading), 'g', 1) + QChar(0x00B0));
 
             double dist;
 
-            if (ref_side > 0)
+            if (trk.newRefSide > 0)
             {
                 dist = (tool.width - tool.overlap) * 0.5 + tool.offset;
-                trk.NudgeRefCurve(dist,curve);
+                trk.NudgeRefCurve(trk.newTrack, dist);
             }
-            else if (ref_side < 0)
+            else if (trk.newRefSide < 0)
             {
                 dist = (tool.width - tool.overlap) * -0.5 + tool.offset;
-                trk.NudgeRefCurve(dist,curve);
+                trk.NudgeRefCurve(trk.newTrack, dist);
             }
             //else no nudge, center ref line
 
-            trk.setIdx(idx);
-        }
+       }
         else
         {
-            curve.isMakingCurve = false;
-            curve.desList.clear();
+            trk.curve.isMakingCurve = false;
+            trk.curve.desList.clear();
+        }
+        break;
+
+    case TrackMode::waterPivot:
+        //Do nothing here.  pivot point is already established.
+        break;
+
+    default:
+        return;
+    }
+
+}
+
+void FormGPS::tracks_finish_new(QString name)
+{
+    double dist;
+    trk.newTrack.name = name;
+
+    switch(trk.getNewMode()) {
+    case TrackMode::AB:
+        if (!trk.ABLine.isMakingABLine) return; //do not add line if it stopped
+
+        if (trk.newRefSide > 0)
+        {
+            dist = (tool.width - tool.overlap) * 0.5 + tool.offset;
+            trk.NudgeRefABLine(trk.newTrack, dist);
+
+        }
+        else if (trk.newRefSide < 0)
+        {
+            dist = (tool.width - tool.overlap) * -0.5 + tool.offset;
+            trk.NudgeRefABLine(trk.newTrack, dist);
         }
 
-         break;
+        trk.ABLine.isMakingABLine = false;
+        break;
+
+    case TrackMode::Curve:
+        if (!trk.curve.isMakingCurve) return; //do not add line if it failed.
+        trk.curve.isMakingCurve = false;
+        break;
 
     case TrackMode::waterPivot:
         break;
@@ -141,6 +197,10 @@ void FormGPS::tracks_finish_new(int mode, QString name, int ref_side, double eas
         return;
 
     }
+
+    trk.gArr.append(trk.newTrack);
+    trk.setIdx(trk.gArr.count() - 1);
+    trk.reloadModel();
 
 }
     /*

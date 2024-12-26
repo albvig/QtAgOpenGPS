@@ -727,7 +727,6 @@ void FormGPS::UpdateFixPosition()
         if (trk.isAutoTrack && !isAutoSteerBtnOn && trk.autoTrack3SecTimer > 1)
         {
             trk.autoTrack3SecTimer = 0;
-            int lastIndex = trk.idx;
 
             trk.SwitchToClosestRefTrack(vehicle.steerAxlePos, vehicle);
         }
