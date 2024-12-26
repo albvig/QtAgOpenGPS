@@ -11,7 +11,7 @@ public:
     explicit BluetoothDeviceList(QObject *parent = 0);
     ~BluetoothDeviceList();
 
-public:
+    Q_INVOKABLE void addDevice(const QString &deviceName, const QString &deviceID);
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
 

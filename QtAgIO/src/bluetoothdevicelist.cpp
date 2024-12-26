@@ -43,3 +43,7 @@ QVariant BluetoothDeviceList::data(const QModelIndex &index, int role) const
     // The view asked for other data, just return an empty QVariant
     return QVariant();
 }
+
+void BluetoothDeviceList::addDevice(const QString &deviceName, const QString &deviceID){
+    m_data.append(deviceName);
+}
