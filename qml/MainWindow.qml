@@ -128,7 +128,7 @@ Window {
         id: aog
         objectName: "aog"
     }
-    Interfaces.LinesInterface {
+    Interfaces.TracksInterface {
         objectName: "tracksInterface"
         id: tracksInterface
     }
