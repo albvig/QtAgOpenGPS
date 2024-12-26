@@ -33,6 +33,7 @@ qt_add_executable(QtAgIO
     formloop_formudp.cpp
     inc/CTraffic.h src/CTraffic.cpp
     inc/CScanReply.h src/CScanReply.cpp
+    inc/bluetoothdevicelist.h src/bluetoothdevicelist.cpp
     interfaceproperty.h
 )
 
