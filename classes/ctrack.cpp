@@ -217,30 +217,30 @@ void CTrack::NudgeRefTrack(double dist)
         {
             ABLine.isABValid = false;
             ABLine.lastSecond = 0;
-            NudgeRefABLine( ABLine.isHeadingSameWay ? dist : -dist);
+            NudgeRefABLine( gArr[idx], ABLine.isHeadingSameWay ? dist : -dist);
         }
         else
         {
             curve.isCurveValid = false;
             curve.lastHowManyPathsAway = 98888;
             curve.lastSecond = 0;
-            NudgeRefCurve( curve.isHeadingSameWay ? dist : -dist);
+            NudgeRefCurve( gArr[idx], curve.isHeadingSameWay ? dist : -dist);
         }
     }
 }
 
-void CTrack::NudgeRefABLine(double dist)
+void CTrack::NudgeRefABLine(CTrk &track, double dist)
 {
-    double head = gArr[idx].heading;
+    double head = track.heading;
 
-    gArr[idx].ptA.easting += (sin(head+glm::PIBy2) * (dist));
-    gArr[idx].ptA.northing += (cos(head + glm::PIBy2) * (dist));
+    track.ptA.easting += (sin(head+glm::PIBy2) * (dist));
+    track.ptA.northing += (cos(head + glm::PIBy2) * (dist));
 
-    gArr[idx].ptB.easting += (sin(head + glm::PIBy2) * (dist));
-    gArr[idx].ptB.northing += (cos(head + glm::PIBy2) * (dist));
+    track.ptB.easting += (sin(head + glm::PIBy2) * (dist));
+    track.ptB.northing += (cos(head + glm::PIBy2) * (dist));
 }
 
-void CTrack::NudgeRefCurve(double distAway)
+void CTrack::NudgeRefCurve(CTrk &track, double distAway)
 {
     curve.isCurveValid = false;
     curve.lastHowManyPathsAway = 98888;
@@ -251,18 +251,18 @@ void CTrack::NudgeRefCurve(double distAway)
     double distSqAway = (distAway * distAway) - 0.01;
     Vec3 point;
 
-    for (int i = 0; i < gArr[idx].curvePts.count(); i++)
+    for (int i = 0; i < track.curvePts.count(); i++)
     {
         point = Vec3(
-            gArr[idx].curvePts[i].easting + (sin(glm::PIBy2 + gArr[idx].curvePts[i].heading) * distAway),
-            gArr[idx].curvePts[i].northing + (cos(glm::PIBy2 + gArr[idx].curvePts[i].heading) * distAway),
-            gArr[idx].curvePts[i].heading);
+            track.curvePts[i].easting + (sin(glm::PIBy2 + track.curvePts[i].heading) * distAway),
+            track.curvePts[i].northing + (cos(glm::PIBy2 + track.curvePts[i].heading) * distAway),
+            track.curvePts[i].heading);
         bool Add = true;
 
-        for (int t = 0; t < gArr[idx].curvePts.count(); t++)
+        for (int t = 0; t < track.curvePts.count(); t++)
         {
-            double dist = ((point.easting - gArr[idx].curvePts[t].easting) * (point.easting - gArr[idx].curvePts[t].easting))
-                          + ((point.northing - gArr[idx].curvePts[t].northing) * (point.northing - gArr[idx].curvePts[t].northing));
+            double dist = ((point.easting - track.curvePts[t].easting) * (point.easting - track.curvePts[t].easting))
+                          + ((point.northing - track.curvePts[t].northing) * (point.northing - track.curvePts[t].northing));
             if (dist < distSqAway)
             {
                 Add = false;
@@ -329,19 +329,19 @@ void CTrack::NudgeRefCurve(double distAway)
 
         curve.CalculateHeadings(curList);
 
-        gArr[idx].curvePts = curList;
-        //gArr[idx].curvePts.clear();
+        track.curvePts = curList;
+        //track.curvePts.clear();
 
         //for (auto item: curList)
         //{
-        //    gArr[idx].curvePts.append(new vec3(item));
+        //    track.curvePts.append(new vec3(item));
         //}
 
         //for (int i = 0; i < cnt; i++)
         //{
         //    arr[i].easting += cos(arr[i].heading) * (dist);
         //    arr[i].northing -= sin(arr[i].heading) * (dist);
-        //    gArr[idx].curvePts.append(arr[i]);
+        //    track.curvePts.append(arr[i]);
         //}
     }
 }
@@ -463,6 +463,35 @@ void CTrack::setIdx(int new_idx)
         emit idxChanged();
         emit modeChanged();
     }
+}
+
+int CTrack::getNewMode(void)
+{
+    return newTrack.mode;
+}
+
+void CTrack::setNewMode(TrackMode new_mode)
+{
+    newTrack.mode = new_mode;
+    emit newModeChanged();
+}
+
+QString CTrack::getNewName(void)
+{
+    if (getNewMode() == TrackMode::AB)
+        return ABLine.desName;
+    else
+        return curve.desName;
+}
+
+void CTrack::setNewName(QString new_name)
+{
+    if (getNewMode() == TrackMode::AB)
+        ABLine.desName = new_name;
+    else
+        curve.desName= new_name;
+
+    emit newNameChanged();
 }
 
 int CTrack::rowCount(const QModelIndex &parent) const

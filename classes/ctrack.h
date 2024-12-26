@@ -69,11 +69,14 @@ public:
     QVector<CTrk> gArr;
     CABCurve curve;
     CABLine ABLine;
+    CTrk newTrack;
+    int newRefSide = 0;
 
     Q_PROPERTY(int idx MEMBER idx NOTIFY idxChanged)
     //put a pointer to ourselves as a model.  This class is both
     //a list model, and also a bunch of properties
     Q_PROPERTY(QObject* model READ getModel CONSTANT)
+    Q_PROPERTY(int newRefSide MEMBER newRefSide NOTIFY newRefSideChanged)
 
     int idx, autoTrack3SecTimer;
 
@@ -86,9 +89,8 @@ public:
     bool isLine, isAutoTrack = false, isAutoSnapToPivot = false, isAutoSnapped;
 
     //creating new track
-    int new_mode;
-    Q_PROPERTY (QString newName MEMBER newName NOTIFY newNameChanged)
-    QString newName;
+    Q_PROPERTY (int newMode READ getNewMode NOTIFY newModeChanged)
+    Q_PROPERTY (QString newName READ getNewName WRITE setNewName NOTIFY newNameChanged)
 
     explicit CTrack(QObject* parent = nullptr);
 
@@ -100,8 +102,8 @@ public:
     void NudgeDistanceReset();
     void SnapToPivot();
     void NudgeRefTrack(double dist);
-    void NudgeRefABLine(double dist);
-    void NudgeRefCurve(double distAway);
+    void NudgeRefABLine(CTrk &track, double dist);
+    void NudgeRefCurve(CTrk &track, double distAway);
 
     void DrawTrackNew(QOpenGLFunctions *gl, const QMatrix4x4 &mvp, const CCamera &camera);
     void DrawTrack(QOpenGLFunctions *gl, const QMatrix4x4 &mvp,
@@ -124,6 +126,12 @@ public:
 
 
     //getters and setters for properties
+    QString getNewName(void);
+    void setNewName(QString new_name);
+
+    int getNewMode(void);
+    void setNewMode(TrackMode);
+
     int getHowManyPathsAway();
     int getMode() { if (idx >=0) return gArr[idx].mode; else return 0; }
     void setIdx(int new_idx);
@@ -147,6 +155,7 @@ signals:
     void isAutoSnappedChanged();
     void isAutoTrackChanged();
     void howManyPathsAwayChanged();
+    void newModeChanged();
     void newNameChanged();
 
 public slots:
@@ -157,8 +166,6 @@ public slots:
         endResetModel();
         emit modelChanged(); //not sure if this is necessary
     }
-
-    void start_new(int mode, double easting, double northing, double heading);
 
 private:
     // Used by QML model interface
