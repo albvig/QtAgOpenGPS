@@ -4,6 +4,11 @@ import bs4 #beautifulSoup
 import sys
 from props import props
 
+# any settings that are specific to QtAOG and not from parsed from
+# AOG should be added to this list structure.  Settings for Dima's
+# blockage monitor should go here, for example.  Any settings not
+# in this list will get whenever the properties are re-synced with AOG
+
 add_props = [
     { 'ini_path':      'display/showBack',
       'cpp_name':      'property_displayShowBack',
