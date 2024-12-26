@@ -29,5 +29,15 @@ Drawer{
                 advancedMenu.showMenu()
             }
         }
+        Comp.ButtonColor{
+            id: bluetooth
+            width: 180
+            height: 50
+            text: qsTr("Bluetooth")
+            onClicked: {
+                settingsWindow.close()
+                bluetoothMenu.show()
+            }
+        }
     }
 }

@@ -111,6 +111,9 @@ void FormLoop::setupGUI()
     connect(agio, SIGNAL(ntripDebug(bool)), this, SLOT(NTRIPDebugMode(bool)));
     connect(agio, SIGNAL(setIPFromUrl(QString)), this, SLOT(LookupNTripIP(QString)));
 
+    //bluetooth
+    connect(agio, SIGNAL(bt_search()), this, SLOT(startBluetoothDiscovery()));
+
 
 }
 

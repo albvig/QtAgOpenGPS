@@ -11,7 +11,7 @@ void FormLoop::startBluetoothDiscovery(){
 
     // Start a discovery
     discoveryAgent->start();
-    qDebug() << "discovery started";
+    agio->setProperty("searchingForBluetooth", true);
 }
 // In your local slot, read information about the found devices
 void FormLoop::bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device)
@@ -55,5 +55,5 @@ void FormLoop::readBluetoothData(){
 }
 
 void FormLoop::bluetoothDiscoveryFinished(){
-    qDebug() << "Bluetooth Discovery finished";
+    agio->setProperty("searchingForBluetooth", false);
 }
