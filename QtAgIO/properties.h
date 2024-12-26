@@ -29,5 +29,6 @@ extern AgIOProperty property_setNTRIP_isHTTP10;
 extern AgIOProperty property_setNTRIP_ipAddress;
 extern AgIOProperty property_setNTRIP_url;
 extern AgIOProperty property_run_isFirstRun;
+extern AgIOProperty property_bluetooth_isOn;
 
 #endif
