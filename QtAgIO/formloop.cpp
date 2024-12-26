@@ -23,6 +23,9 @@ FormLoop::FormLoop(QObject *parent) : QObject(parent),
     LoadLoopback();
 	LoadUDPNetwork();
 
+    if(property_setBluetooth_isOn)
+        startBluetoothDiscovery();
+
    //buffer.resize(1024);
     ConfigureNTRIP();
 
