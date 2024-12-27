@@ -162,26 +162,23 @@ void FormGPS::setupGui()
     connect(openGLControl,SIGNAL(clicked(QVariant)),this,SLOT(onGLControl_clicked(QVariant)));
     connect(openGLControl,SIGNAL(dragged(int,int,int,int)),this,SLOT(onGLControl_dragged(int,int,int,int)));
 
-    //TODO: save and restore these numbers from settings
-//    qml_root->setProperty("width",1024);
-//    qml_root->setProperty("height",768);
-
     connect(aog,SIGNAL(sectionButtonStateChanged()), &tool.sectionButtonState, SLOT(onStatesUpdated()));
 
-
-    /*
-    //AB Line Picker
-    //react to UI changing these properties
-    connect(aog,SIGNAL(currentABLineChanged()), this, SLOT(update_current_ABline_from_qml()));
-    connect(aog,SIGNAL(currentABCurveChanged()), this, SLOT(update_current_ABline_from_qml()));
-    //linesInterface signals
-    connect(linesInterface,SIGNAL(abLine_updateLines()),this,SLOT(update_ABlines_in_qml()));
-    connect(linesInterface,SIGNAL(abLine_addLine(QString, double, double, double)), this, SLOT(add_new_ABline(QString,double,double,double)));
-    connect(linesInterface,SIGNAL(abLine_setA(bool,double,double,double)), this, SLOT(start_newABLine(bool,double,double,double)));
-    connect(linesInterface,SIGNAL(abLine_deleteLine(int)), this, SLOT( delete_ABLine(int)));
-    connect(linesInterface,SIGNAL(abLine_swapHeading(int)), this, SLOT(swap_heading_ABLine(int)));
-    connect(linesInterface,SIGNAL(abLine_changeName(int, QString)), this, SLOT(change_name_ABLine(int,QString)));
-    */
+    connect(tracksInterface, SIGNAL(start_new(int)), this, SLOT(tracks_start_new(int)));
+    connect(tracksInterface, SIGNAL(mark_start(double,double,double)), this, SLOT(tracks_mark_start(double,double,double)));
+    connect(tracksInterface, SIGNAL(mark_end(int,double,double)), this, SLOT(tracks_mark_end(int,double,double)));
+    connect(tracksInterface, SIGNAL(finish_new(QString)), this, SLOT(tracks_finish_new(QString)));
+    connect(tracksInterface, SIGNAL(cancel_new()), this, SLOT(tracks_cancel_new()));
+    connect(tracksInterface, SIGNAL(pause_or_resume(bool)), this, SLOT(tracks_pause(bool)));
+    connect(tracksInterface, SIGNAL(add_point(double,double,double)), this, SLOT(tracks_add_point(double,double,double)));
+    connect(tracksInterface, SIGNAL(select(int)), this, SLOT(tracks_select(int)));
+    connect(tracksInterface, SIGNAL(swapAB(int)), this, SLOT(tracks_swapAB(int)));
+    connect(tracksInterface, SIGNAL(changeName(int,QString)), this, SLOT(tracks_changeName(int,QString)));
+    connect(tracksInterface, SIGNAL(delete_track(int)), this, SLOT(tracks_delete(int)));
+    connect(tracksInterface, SIGNAL(ref_nudge(double)), this, SLOT(tracks_ref_nudge(double)));
+    connect(tracksInterface, SIGNAL(nudge_zero()), this, SLOT(tracks_nudge_zero()));
+    connect(tracksInterface, SIGNAL(nudge_center()), this, SLOT(tracks_nudge_center()));
+    connect(tracksInterface, SIGNAL(nudge(double)), this, SLOT(tracks_nudge(double)));
 
     //on screen buttons
     connect(aog,SIGNAL(zoomIn()), this, SLOT(onBtnZoomIn_clicked()));
