@@ -1,8 +1,21 @@
+#include <QOpenGLFunctions>
+#include <QMatrix4x4>
+#include <QVector>
+#include <QFuture>
+#include <QtConcurrent/QtConcurrent>
+#include "glutils.h"
 #include "ctrack.h"
 #include "cvehicle.h"
 #include "glm.h"
 #include "cabcurve.h"
 #include "cabline.h"
+#include "aogproperty.h"
+#include "cyouturn.h"
+#include "cboundary.h"
+#include "ctram.h"
+#include "ccamera.h"
+#include "cahrs.h"
+#include "cguidance.h"
 
 CTrk::CTrk()
 {
@@ -12,6 +25,7 @@ CTrk::CTrk()
 CTrack::CTrack(QObject* parent) : QAbstractListModel(parent)
 {
     // Initialize role names
+    m_roleNames[index] = "index";
     m_roleNames[NameRole] = "name";
     m_roleNames[IsVisibleRole] = "isVisible";
     m_roleNames[ModeRole] = "mode";
@@ -21,7 +35,7 @@ CTrack::CTrack(QObject* parent) : QAbstractListModel(parent)
     m_roleNames[endPtB] = "endPtB";
     m_roleNames[nudgeDistance] = "nudgeDistance";
 
-    idx = -1;
+    setIdx(-1);
 }
 
 int CTrack::FindClosestRefTrack(Vec3 pivot, const CVehicle &vehicle)
@@ -121,7 +135,19 @@ int CTrack::FindClosestRefTrack(Vec3 pivot, const CVehicle &vehicle)
     return trak;
 }
 
-void CTrack::NudgeTrack(double dist, CABLine &ABLine, CABCurve &curve)
+void CTrack::SwitchToClosestRefTrack(Vec3 pivot, const CVehicle &vehicle)
+{
+    int new_idx;
+
+    new_idx = FindClosestRefTrack(pivot, vehicle);
+    if (new_idx >= 0 && new_idx != idx) {
+        setIdx(new_idx);
+        curve.isCurveValid = false;
+        ABLine.isABValid = false;
+    }
+}
+
+void CTrack::NudgeTrack(double dist)
 {
     if (idx > -1)
     {
@@ -144,7 +170,7 @@ void CTrack::NudgeTrack(double dist, CABLine &ABLine, CABCurve &curve)
     }
 }
 
-void CTrack::NudgeDistanceReset(CABLine &ABLine, CABCurve &curve)
+void CTrack::NudgeDistanceReset()
 {
     if (idx > -1 && gArr.count() > 0)
     {
@@ -164,7 +190,7 @@ void CTrack::NudgeDistanceReset(CABLine &ABLine, CABCurve &curve)
     }
 }
 
-void CTrack::SnapToPivot(CABLine &ABLine, CABCurve &curve)
+void CTrack::SnapToPivot()
 {
     //if (isBtnGuidanceOn)
 
@@ -172,18 +198,18 @@ void CTrack::SnapToPivot(CABLine &ABLine, CABCurve &curve)
     {
         if (gArr[idx].mode == (int)(TrackMode::AB))
         {
-            NudgeTrack(ABLine.distanceFromCurrentLinePivot, ABLine, curve);
+            NudgeTrack(ABLine.distanceFromCurrentLinePivot);
 
         }
         else
         {
-            NudgeTrack(curve.distanceFromCurrentLinePivot, ABLine, curve);
+            NudgeTrack(curve.distanceFromCurrentLinePivot);
         }
 
     }
 }
 
-void CTrack::NudgeRefTrack(double dist, CABLine &ABLine, CABCurve &curve)
+void CTrack::NudgeRefTrack(double dist)
 {
     if (idx > -1)
     {
@@ -191,30 +217,30 @@ void CTrack::NudgeRefTrack(double dist, CABLine &ABLine, CABCurve &curve)
         {
             ABLine.isABValid = false;
             ABLine.lastSecond = 0;
-            NudgeRefABLine( ABLine.isHeadingSameWay ? dist : -dist);
+            NudgeRefABLine( gArr[idx], ABLine.isHeadingSameWay ? dist : -dist);
         }
         else
         {
             curve.isCurveValid = false;
             curve.lastHowManyPathsAway = 98888;
             curve.lastSecond = 0;
-            NudgeRefCurve( curve.isHeadingSameWay ? dist : -dist, curve);
+            NudgeRefCurve( gArr[idx], curve.isHeadingSameWay ? dist : -dist);
         }
     }
 }
 
-void CTrack::NudgeRefABLine(double dist)
+void CTrack::NudgeRefABLine(CTrk &track, double dist)
 {
-    double head = gArr[idx].heading;
+    double head = track.heading;
 
-    gArr[idx].ptA.easting += (sin(head+glm::PIBy2) * (dist));
-    gArr[idx].ptA.northing += (cos(head + glm::PIBy2) * (dist));
+    track.ptA.easting += (sin(head+glm::PIBy2) * (dist));
+    track.ptA.northing += (cos(head + glm::PIBy2) * (dist));
 
-    gArr[idx].ptB.easting += (sin(head + glm::PIBy2) * (dist));
-    gArr[idx].ptB.northing += (cos(head + glm::PIBy2) * (dist));
+    track.ptB.easting += (sin(head + glm::PIBy2) * (dist));
+    track.ptB.northing += (cos(head + glm::PIBy2) * (dist));
 }
 
-void CTrack::NudgeRefCurve(double distAway, CABCurve &curve)
+void CTrack::NudgeRefCurve(CTrk &track, double distAway)
 {
     curve.isCurveValid = false;
     curve.lastHowManyPathsAway = 98888;
@@ -225,18 +251,18 @@ void CTrack::NudgeRefCurve(double distAway, CABCurve &curve)
     double distSqAway = (distAway * distAway) - 0.01;
     Vec3 point;
 
-    for (int i = 0; i < gArr[idx].curvePts.count(); i++)
+    for (int i = 0; i < track.curvePts.count(); i++)
     {
         point = Vec3(
-            gArr[idx].curvePts[i].easting + (sin(glm::PIBy2 + gArr[idx].curvePts[i].heading) * distAway),
-            gArr[idx].curvePts[i].northing + (cos(glm::PIBy2 + gArr[idx].curvePts[i].heading) * distAway),
-            gArr[idx].curvePts[i].heading);
+            track.curvePts[i].easting + (sin(glm::PIBy2 + track.curvePts[i].heading) * distAway),
+            track.curvePts[i].northing + (cos(glm::PIBy2 + track.curvePts[i].heading) * distAway),
+            track.curvePts[i].heading);
         bool Add = true;
 
-        for (int t = 0; t < gArr[idx].curvePts.count(); t++)
+        for (int t = 0; t < track.curvePts.count(); t++)
         {
-            double dist = ((point.easting - gArr[idx].curvePts[t].easting) * (point.easting - gArr[idx].curvePts[t].easting))
-                          + ((point.northing - gArr[idx].curvePts[t].northing) * (point.northing - gArr[idx].curvePts[t].northing));
+            double dist = ((point.easting - track.curvePts[t].easting) * (point.easting - track.curvePts[t].easting))
+                          + ((point.northing - track.curvePts[t].northing) * (point.northing - track.curvePts[t].northing));
             if (dist < distSqAway)
             {
                 Add = false;
@@ -303,21 +329,169 @@ void CTrack::NudgeRefCurve(double distAway, CABCurve &curve)
 
         curve.CalculateHeadings(curList);
 
-        gArr[idx].curvePts = curList;
-        //gArr[idx].curvePts.clear();
+        track.curvePts = curList;
+        //track.curvePts.clear();
 
         //for (auto item: curList)
         //{
-        //    gArr[idx].curvePts.append(new vec3(item));
+        //    track.curvePts.append(new vec3(item));
         //}
 
         //for (int i = 0; i < cnt; i++)
         //{
         //    arr[i].easting += cos(arr[i].heading) * (dist);
         //    arr[i].northing -= sin(arr[i].heading) * (dist);
-        //    gArr[idx].curvePts.append(arr[i]);
+        //    track.curvePts.append(arr[i]);
         //}
     }
+}
+
+void CTrack::DrawTrackNew(QOpenGLFunctions *gl, const QMatrix4x4 &mvp, const CCamera &camera)
+{
+    if (idx >= 0) {
+        if (gArr[idx].mode == TrackMode::AB)
+            ABLine.DrawABLineNew(gl, mvp, camera);
+        else if (gArr[idx].mode == TrackMode::Curve)
+            curve.DrawCurveNew(gl, mvp);
+    }
+}
+
+void CTrack::DrawTrack(QOpenGLFunctions *gl,
+                       const QMatrix4x4 &mvp,
+                       bool isFontOn,
+                       CYouTurn &yt,
+                       const CCamera &camera,
+                       const CGuidance &gyd)
+{
+    if (idx >= 0) {
+        if (gArr[idx].mode == TrackMode::AB)
+            ABLine.DrawABLines(gl, mvp, isFontOn,gArr[idx], yt, camera, gyd);
+        else if (gArr[idx].mode == TrackMode::Curve)
+            curve.DrawCurve(gl, mvp, isFontOn, gArr[idx], yt, camera);
+    }
+}
+
+void CTrack::DrawTrackGoalPoint(QOpenGLFunctions *gl,
+                                const QMatrix4x4 &mvp)
+{
+    GLHelperOneColor gldraw1;
+    QColor color;
+
+    if (idx >= 0) {
+        color.setRgbF(0.98, 0.98, 0.098);
+        if (gArr[idx].mode == TrackMode::AB) {
+            gldraw1.append(QVector3D(ABLine.goalPointAB.easting, ABLine.goalPointAB.northing, 0));
+            gldraw1.draw(gl,mvp,QColor::fromRgbF(0,0,0),GL_POINTS,16);
+            gldraw1.draw(gl,mvp,color,GL_POINTS,10);
+        } else if (gArr[idx].mode == TrackMode::Curve) {
+            gldraw1.append(QVector3D(curve.goalPointCu.easting, curve.goalPointCu.northing, 0));
+            gldraw1.draw(gl,mvp,QColor::fromRgbF(0,0,0),GL_POINTS,16);
+            gldraw1.draw(gl,mvp,color,GL_POINTS,10);
+        }
+    }
+}
+
+void CTrack::BuildCurrentLine(Vec3 pivot, double secondsSinceStart,
+                              bool isAutoSteerBtnOn,
+                              int &makeUTurnCounter,
+                              CYouTurn &yt,
+                              CVehicle &vehicle,
+                              const CBoundary &bnd,
+                              const CAHRS &ahrs,
+                              CGuidance &gyd,
+                              CNMEA &pn)
+{
+    if (gArr.count() > 0 && idx > -1)
+    {
+        if (gArr[idx].mode == TrackMode::AB)
+        {
+            ABLine.BuildCurrentABLineList(pivot,secondsSinceStart,gArr[idx],yt,vehicle);
+
+            ABLine.GetCurrentABLine(pivot, vehicle.steerAxlePos,isAutoSteerBtnOn,vehicle,yt,ahrs,gyd,pn,makeUTurnCounter);
+        }
+        else
+        {
+            //build new current ref line if required
+            curve.BuildCurveCurrentList(pivot, secondsSinceStart,vehicle,gArr[idx],bnd,yt);
+
+            curve.GetCurrentCurveLine(pivot, vehicle.steerAxlePos,isAutoSteerBtnOn,vehicle,gArr[idx],yt,ahrs,gyd,pn,makeUTurnCounter);
+        }
+    }
+    emit howManyPathsAwayChanged(); //notify QML property is changed
+}
+
+void CTrack::ResetCurveLine()
+{
+    if (idx >=0 && gArr[idx].mode == TrackMode::Curve) {
+        curve.curList.clear();
+        setIdx(-1);
+    }
+}
+
+void CTrack::AddPathPoint(Vec3 point)
+{
+    if (curve.isMakingCurve) {
+        curve.desList.append(point);
+    } else if (ABLine.isMakingABLine) {
+        ABLine.desHeading = atan2(point.easting - ABLine.desPtA.easting,
+                                  point.northing - ABLine.desPtA.northing);
+
+        ABLine.desLineEndA.easting = ABLine.desPtA.easting - (sin(ABLine.desHeading) * 1000);
+        ABLine.desLineEndA.northing = ABLine.desPtA.northing - (cos(ABLine.desHeading) * 1000);
+
+        ABLine.desLineEndB.easting = ABLine.desPtA.easting + (sin(ABLine.desHeading) * 1000);
+        ABLine.desLineEndB.northing = ABLine.desPtA.northing + (cos(ABLine.desHeading) * 1000);
+    }
+}
+
+int CTrack::getHowManyPathsAway()
+{
+    if (idx >= 0) {
+        if (gArr[idx].mode == TrackMode::AB)
+            return ABLine.howManyPathsAway;
+        else
+            return curve.howManyPathsAway;
+    }
+
+    return 0;
+}
+
+void CTrack::setIdx(int new_idx)
+{
+    if (new_idx < gArr.count()) {
+        idx = new_idx;
+        emit idxChanged();
+        emit modeChanged();
+    }
+}
+
+int CTrack::getNewMode(void)
+{
+    return newTrack.mode;
+}
+
+void CTrack::setNewMode(TrackMode new_mode)
+{
+    newTrack.mode = new_mode;
+    emit newModeChanged();
+}
+
+QString CTrack::getNewName(void)
+{
+    if (getNewMode() == TrackMode::AB)
+        return ABLine.desName;
+    else
+        return curve.desName;
+}
+
+void CTrack::setNewName(QString new_name)
+{
+    if (getNewMode() == TrackMode::AB)
+        ABLine.desName = new_name;
+    else
+        curve.desName= new_name;
+
+    emit newNameChanged();
 }
 
 int CTrack::rowCount(const QModelIndex &parent) const
@@ -325,7 +499,6 @@ int CTrack::rowCount(const QModelIndex &parent) const
     Q_UNUSED(parent);
     return gArr.size();
 }
-
 
 QVariant CTrack::data(const QModelIndex &index, int role) const
 {
@@ -337,6 +510,8 @@ QVariant CTrack::data(const QModelIndex &index, int role) const
     const CTrk &trk = gArr.at(row);
     qDebug() << row << role << trk.name;
     switch(role) {
+    case RoleNames::index:
+        return row;
     case RoleNames::NameRole:
         return trk.name;
     case RoleNames::ModeRole:

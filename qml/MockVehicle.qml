@@ -20,4 +20,9 @@ Item {
     property var vehicle_list: [
         { index: 0, name: "tractor" }
     ]
+
+    property bool isHydLiftOn: false
+    property bool hydLiftDown: false
+    property bool isChangingDirection: false
+    property bool isReverse: false
 }

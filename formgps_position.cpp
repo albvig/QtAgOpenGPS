@@ -5,7 +5,6 @@
 #include "formgps.h"
 #include "cnmea.h"
 #include "cmodulecomm.h"
-#include "cabline.h"
 #include "ccontour.h"
 #include "cvehicle.h"
 #include "csection.h"
@@ -725,38 +724,14 @@ void FormGPS::UpdateFixPosition()
     else
     {
         //auto track routine
-        //NOTE: Michael. CS has "isBtnAutoSteerOn", but I get an error when I do that.
         if (trk.isAutoTrack && !isAutoSteerBtnOn && trk.autoTrack3SecTimer > 1)
         {
             trk.autoTrack3SecTimer = 0;
-            int lastIndex = trk.idx;
-            //NOTE: Michael. Is this right?
-            trk.idx = trk.FindClosestRefTrack(vehicle.steerAxlePos, vehicle);
-            if ( lastIndex != trk.idx )
-            {
-                curve.isCurveValid = false;
-                ABLine.isABValid = false;
-            }
+
+            trk.SwitchToClosestRefTrack(vehicle.steerAxlePos, vehicle);
         }
 
-        //NOTE: hmmm. Not sure about this all
-        //like normal
-        if (trk.gArr.count() > 0 && trk.idx > -1)
-        {
-            if (trk.gArr[trk.idx].mode == TrackMode::AB)
-            {
-                ABLine.BuildCurrentABLineList(vehicle.pivotAxlePos,secondsSinceStart,trk,yt,vehicle);
-
-                ABLine.GetCurrentABLine(vehicle.pivotAxlePos, vehicle.steerAxlePos,isAutoSteerBtnOn,vehicle,yt,ahrs,gyd,pn,makeUTurnCounter);
-            }
-            else
-            {
-                //build new current ref line if required
-                curve.BuildCurveCurrentList(vehicle.pivotAxlePos,secondsSinceStart,vehicle,trk,bnd,yt);
-
-                curve.GetCurrentCurveLine(vehicle.pivotAxlePos, vehicle.steerAxlePos,isAutoSteerBtnOn,vehicle,trk,yt,ahrs,gyd,pn,makeUTurnCounter);
-            }
-        }
+        trk.BuildCurrentLine(vehicle.pivotAxlePos,secondsSinceStart,isAutoSteerBtnOn,makeUTurnCounter,yt,vehicle,bnd,ahrs,gyd,pn);
     }
 
     // autosteer at full speed of updates
@@ -1102,14 +1077,17 @@ void FormGPS::UpdateFixPosition()
                     }
                     else
                     {
-                        if (trk.gArr[trk.idx].mode == TrackMode::AB)
+                        if (trk.getMode() == TrackMode::AB)
                         {
-                            yt.BuildABLineDubinsYouTurn(yt.isYouTurnRight,vehicle,bnd,ABLine,
+                            yt.BuildABLineDubinsYouTurn(yt.isYouTurnRight,vehicle,bnd,
                                                         trk,makeUTurnCounter,secondsSinceStart);
                         }
-                        else yt.BuildCurveDubinsYouTurn(yt.isYouTurnRight, vehicle.pivotAxlePos,
-                                                        vehicle,bnd,curve,trk,makeUTurnCounter,
+                        else
+                        {
+                            yt.BuildCurveDubinsYouTurn(yt.isYouTurnRight, vehicle.pivotAxlePos,
+                                                        vehicle,bnd,trk,makeUTurnCounter,
                                                         secondsSinceStart);
+                        }
                     }
 
                     if (yt.uTurnStyle == 0 && yt.youTurnPhase == 10)
@@ -1139,7 +1117,7 @@ void FormGPS::UpdateFixPosition()
                     //if we are close enough to pattern, trigger.
                     if ((distancePivotToTurnLine <= 1.0) && (distancePivotToTurnLine >= 0) && !yt.isYouTurnTriggered)
                     {
-                        yt.YouTurnTrigger(trk, vehicle, ABLine, curve);
+                        yt.YouTurnTrigger(trk, vehicle);
                         //TODO: sounds
                         //sounds.isBoundAlarming = false;
                     }
@@ -1261,19 +1239,8 @@ void FormGPS::UpdateFixPosition()
     aog->setProperty("steerAngleSet", vehicle.guidanceLineSteerAngle);
     aog->setProperty("droppedSentences", udpWatchCounts);
 
-    //NOTE:This will need some help. Also, do we still need the if statement at 1274?
-
-    if (trk.idx > -1) {
-        if (trk.gArr[trk.idx].mode == TrackMode::AB) {
-        //currentABLine_heading is set in formgps_ui.cpp
-            aog->setProperty("current_trackNum", ABLine.howManyPathsAway);
-        } else {
-            aog->setProperty("current_trackNum", curve.howManyPathsAway);
-        }
-    } else {
-        //TODO: add contour
-        aog->setProperty("current_trackNum", 0);
-    }
+    //TODO: access this in QML directly from trk.howManyPathsAway property
+    aog->setProperty("current_trackNum", trk.getHowManyPathsAway());
 
     if (!timerSim.isActive())
         //if running simulator pretend steer module
@@ -1489,7 +1456,7 @@ void FormGPS::CalculatePositionHeading()
     }
 
     //finally fixed distance for making a curve line
-    if (!curve.isMakingCurve) vehicle.sectionTriggerStepDistance = vehicle.sectionTriggerStepDistance + 0.5;
+    if (!trk.curve.isMakingCurve) vehicle.sectionTriggerStepDistance = vehicle.sectionTriggerStepDistance + 0.5;
     //if (ct.isContourBtnOn) vehicle.sectionTriggerStepDistance *=0.5;
 
     //precalc the sin and cos of heading * -1
@@ -1683,10 +1650,7 @@ void FormGPS::AddSectionOrPathPoints()
         recPath.recList.append(CRecPathPt(vehicle.pivotAxlePos.easting, vehicle.pivotAxlePos.northing, vehicle.pivotAxlePos.heading, speed, autoBtn));
     }
 
-    if (curve.isMakingCurve)
-    {
-        curve.desList.append(Vec3(vehicle.pivotAxlePos.easting, vehicle.pivotAxlePos.northing, vehicle.pivotAxlePos.heading));
-    }
+    trk.AddPathPoint(vehicle.pivotAxlePos);
 
     //save the north & east as previous
     prevSectionPos.northing = pn.fix.northing;

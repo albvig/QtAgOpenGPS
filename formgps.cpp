@@ -1012,7 +1012,7 @@ void FormGPS::JobClose()
     //ABLine
     tram.tramList.clear();
 
-    curve.ResetCurveLine(trk);
+    trk.ResetCurveLine();
 
     //tracks
     trk.gArr.clear();
@@ -1078,7 +1078,7 @@ void FormGPS::JobNew()
     autoBtnState = btnStates::Off;
     //btnSectionMasterAuto.Image = Properties.Resources.SectionMasterOff;
 
-    ABLine.abHeading = 0.00;
+    trk.ABLine.abHeading = 0.00;
 
     SetZoom();
     fileSaveCounter = 25;

@@ -19,6 +19,7 @@ class CVehicle;
 class QOpenGLFunctions;
 class CVehicle;
 class CNMEA;
+class CTrack;
 
 //class QMatrix4x4;
 
@@ -156,8 +157,7 @@ public:
                                  Vec3 pivotPos,
                                  CVehicle &vehicle,
                                  const CBoundary &bnd,
-                                 CABCurve &curve,
-                                 const CTrack &trk,
+                                 CTrack &trk,
                                  int &makeUTurnCounter,
                                  int secondsSinceStart
                                  );
@@ -165,7 +165,6 @@ public:
     bool BuildABLineDubinsYouTurn(bool isTurnLeft,
                                   CVehicle &vehicle,
                                   const CBoundary &bnd,
-                                  CABLine &ABLine,
                                   CTrack &trk,
                                   int &makeUTurnCounter,
                                   int secondsSinceStart
@@ -177,7 +176,6 @@ private:
                               int makeUTurnCounter,
                               CVehicle &vehicle,
                               const CBoundary &bnd,
-                              const CABCurve &curve,
                               const CTrack &trk,
                               int secondsSinceStart);
 
@@ -185,26 +183,24 @@ private:
                              int makeUTurnCounter,
                              CVehicle &vehicle,
                              const CBoundary &bnd,
-                             CABCurve &curve,
-                             const CTrack &trk,
+                             CTrack &trk,
                              int secondsSinceStart
                              );
 
     bool CreateABOmegaTurn(bool isTurnLeft,                              int makeUTurnCounter,
                            CVehicle &vehicle,
                            const CBoundary &bnd,
-                           const CABLine &ABLine);
+                           const CTrack &track);
     bool CreateABWideTurn(bool isTurnLeft,
                           int makeUTurnCounter,
                           CVehicle &vehicle,
                           const CBoundary &bnd,
-                          CABLine &ABLine,
                           CTrack &trk,
                           int secondsSinceStart);
 
     bool KStyleTurnCurve(bool isTurnLeft, int &makeUTurnCounter,
                          CVehicle &vehicle,
-                         const CABCurve &curve,
+                         const CTrack &trk,
                          const CBoundary &bnd);
 
     bool KStyleTurnAB(bool isTurnLeft, int &makeUTurnCounter,
@@ -266,7 +262,7 @@ public:
     void SmoothYouTurn(int smPts);
 
     //called to initiate turn
-    void YouTurnTrigger(const CTrack &trk, CVehicle &vehicle, CABLine &ABLine, CABCurve &curve);
+    void YouTurnTrigger(CTrack &trk, CVehicle &vehicle);
 
     //Normal copmpletion of youturn
     void CompleteYouTurn(int &makeUTurnCounter);
@@ -283,17 +279,12 @@ public:
     //build the points and path of youturn to be scaled and transformed
     void BuildManualYouLateral(bool isTurnLeft,
                                CVehicle &vehicle,
-                               const CTrack &trk,
-                               CABLine &ABLine,
-                               CABCurve &curve);
+                               CTrack &trk);
 
     //build the points and path of youturn to be scaled and transformed
     void BuildManualYouTurn(bool isTurnLeft, bool isTurnButtonTriggered,
                             CVehicle &vehicle,
-                            const CTrack &trk,
-                            CABLine &ABLine,
-                            CABCurve &curve
-                            );
+                            CTrack &trk);
 
     //determine distance from youTurn guidance line
     bool DistanceFromYouTurnLine(CVehicle &v, CNMEA &pn, int &makeUTurnCounter);
