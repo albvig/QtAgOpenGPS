@@ -279,17 +279,12 @@ public:
     //build the points and path of youturn to be scaled and transformed
     void BuildManualYouLateral(bool isTurnLeft,
                                CVehicle &vehicle,
-                               const CTrack &trk,
-                               CABLine &ABLine,
-                               CABCurve &curve);
+                               CTrack &trk);
 
     //build the points and path of youturn to be scaled and transformed
     void BuildManualYouTurn(bool isTurnLeft, bool isTurnButtonTriggered,
                             CVehicle &vehicle,
-                            const CTrack &trk,
-                            CABLine &ABLine,
-                            CABCurve &curve
-                            );
+                            CTrack &trk);
 
     //determine distance from youTurn guidance line
     bool DistanceFromYouTurnLine(CVehicle &v, CNMEA &pn, int &makeUTurnCounter);

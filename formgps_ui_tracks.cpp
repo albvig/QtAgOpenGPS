@@ -250,6 +250,67 @@ void FormGPS::tracks_nudge(double dist_m)
     trk.NudgeTrack(dist_m);
 }
 
+void FormGPS::tracks_delete(int index)
+{
+    trk.gArr.removeAt(index);
+}
+
+void FormGPS::tracks_swapAB(int idx)
+{
+    if (idx >= 0 && idx < trk.gArr.count()) {
+        if (trk.gArr[idx].mode == TrackMode::AB)
+        {
+            Vec2 bob = trk.gArr[idx].ptA;
+            trk.gArr[idx].ptA = trk.gArr[idx].ptB;
+            trk.gArr[idx].ptB = bob;
+
+            trk.gArr[idx].heading += M_PI;
+            if (trk.gArr[idx].heading < 0) trk.gArr[idx].heading += glm::twoPI;
+            if (trk.gArr[idx].heading > glm::twoPI) trk.gArr[idx].heading -= glm::twoPI;
+        }
+        else
+        {
+            int cnt = trk.gArr[idx].curvePts.count();
+            if (cnt > 0)
+            {
+                QVector<Vec3> arr;
+                arr.reserve(trk.gArr[idx].curvePts.count());
+                std::reverse_copy(trk.gArr[idx].curvePts.begin(),
+                                  trk.gArr[idx].curvePts.end(), std::back_inserter(arr));
+
+                trk.gArr[idx].curvePts.clear();
+
+                trk.gArr[idx].heading += M_PI;
+                if (trk.gArr[idx].heading < 0) trk.gArr[idx].heading += glm::twoPI;
+                if (trk.gArr[idx].heading > glm::twoPI) trk.gArr[idx].heading -= glm::twoPI;
+
+                for (int i = 1; i < cnt; i++)
+                {
+                    Vec3 pt3 = arr[i];
+                    pt3.heading += M_PI;
+                    if (pt3.heading > glm::twoPI) pt3.heading -= glm::twoPI;
+                    if (pt3.heading < 0) pt3.heading += glm::twoPI;
+                    trk.gArr[idx].curvePts.append(pt3);
+                }
+
+                Vec2 temp = trk.gArr[idx].ptA;
+
+                trk.gArr[idx].ptA =trk.gArr[idx].ptB;
+                trk.gArr[idx].ptB = temp;
+            }
+        }
+    }
+    trk.reloadModel();
+}
+
+void FormGPS::tracks_changeName(int index, QString new_name)
+{
+    if (index >=0 && index < trk.gArr.count() ) {
+        trk.gArr[index].name = new_name;
+    }
+    trk.reloadModel();
+}
+
     /*
 void FormGPS::update_current_ABline_from_qml()
 {

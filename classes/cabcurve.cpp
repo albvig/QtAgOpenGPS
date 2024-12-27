@@ -749,7 +749,7 @@ void CABCurve::GetCurrentCurveLine(Vec3 pivot,
                 if (A > curList.count() - 1 || B > curList.count() - 1)
                     return;
             }
-            else
+            else //it's TrackMode::waterPivot
             {
                 for (int j = 0; j < curList.count(); j++)
                 {

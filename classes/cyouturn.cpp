@@ -2581,9 +2581,7 @@ void CYouTurn::FailCreate()
 //build the points and path of youturn to be scaled and transformed
 void CYouTurn::BuildManualYouLateral(bool isTurnRight,
                                      CVehicle &vehicle,
-                                     const CTrack &trk,
-                                     CABLine &ABLine,
-                                     CABCurve &curve
+                                     CTrack &trk
                                      )
 {
     double tool_toolWidth = property_setVehicle_toolWidth;
@@ -2595,19 +2593,19 @@ void CYouTurn::BuildManualYouLateral(bool isTurnRight,
     {
         if (trk.gArr[trk.idx].mode == (int)TrackMode::AB)
         {
-            rEastYT = ABLine.rEastAB;
-            rNorthYT = ABLine.rNorthAB;
-            isHeadingSameWay = ABLine.isHeadingSameWay;
-            head = ABLine.abHeading;
-            ABLine.isLateralTriggered = true;
+            rEastYT = trk.ABLine.rEastAB;
+            rNorthYT = trk.ABLine.rNorthAB;
+            isHeadingSameWay = trk.ABLine.isHeadingSameWay;
+            head = trk.ABLine.abHeading;
+            trk.ABLine.isLateralTriggered = true;
         }
         else
         {
-            rEastYT = curve.rEastCu;
-            rNorthYT = curve.rNorthCu;
-            isHeadingSameWay = curve.isHeadingSameWay;
-            head = curve.manualUturnHeading;
-            curve.isLateralTriggered = true;
+            rEastYT = trk.curve.rEastCu;
+            rNorthYT = trk.curve.rNorthCu;
+            isHeadingSameWay = trk.curve.isHeadingSameWay;
+            head = trk.curve.manualUturnHeading;
+            trk.curve.isLateralTriggered = true;
         }
     }
     else return;
@@ -2632,16 +2630,14 @@ void CYouTurn::BuildManualYouLateral(bool isTurnRight,
         vehicle.guidanceLookPos.northing = rNorthYT - (sin(-head) * turnOffset);
     }
 
-    ABLine.isABValid = false;
-    curve.isCurveValid = false;
+    trk.ABLine.isABValid = false;
+    trk.curve.isCurveValid = false;
 }
 
 void CYouTurn::BuildManualYouTurn(bool isTurnRight,
                                   bool isTurnButtonTriggered,
                                   CVehicle &vehicle,
-                                  const CTrack &trk,
-                                  CABLine &ABLine,
-                                  CABCurve &curve)
+                                  CTrack &trk)
 {
     double minTurningRadius = property_setVehicle_minTurningRadius;
     double tool_toolWidth = property_setVehicle_toolWidth;
@@ -2656,19 +2652,19 @@ void CYouTurn::BuildManualYouTurn(bool isTurnRight,
     {
         if (trk.gArr[trk.idx].mode == (int)TrackMode::AB)
         {
-            rEastYT = ABLine.rEastAB;
-            rNorthYT = ABLine.rNorthAB;
-            isHeadingSameWay = ABLine.isHeadingSameWay;
-            head = ABLine.abHeading;
-            ABLine.isLateralTriggered = true;
+            rEastYT = trk.ABLine.rEastAB;
+            rNorthYT = trk.ABLine.rNorthAB;
+            isHeadingSameWay = trk.ABLine.isHeadingSameWay;
+            head = trk.ABLine.abHeading;
+            trk.ABLine.isLateralTriggered = true;
         }
         else
         {
-            rEastYT = curve.rEastCu;
-            rNorthYT = curve.rNorthCu;
-            isHeadingSameWay = curve.isHeadingSameWay;
-            head = curve.manualUturnHeading;
-            curve.isLateralTriggered = true;
+            rEastYT = trk.curve.rEastCu;
+            rNorthYT = trk.curve.rNorthCu;
+            isHeadingSameWay = trk.curve.isHeadingSameWay;
+            head = trk.curve.manualUturnHeading;
+            trk.curve.isLateralTriggered = true;
         }
     }
     else return;
@@ -2717,9 +2713,9 @@ void CYouTurn::BuildManualYouTurn(bool isTurnRight,
     vehicle.guidanceLookPos.easting = ytList[ytList.count() - 1].easting;
     vehicle.guidanceLookPos.northing = ytList[ytList.count() - 1].northing;
 
-    ABLine.isABValid = false;
-    curve.isCurveValid = false;
-    curve.lastHowManyPathsAway = 98888;
+    trk.ABLine.isABValid = false;
+    trk.curve.isCurveValid = false;
+    trk.curve.lastHowManyPathsAway = 98888;
 }
 
 //determine distance from youTurn guidance line

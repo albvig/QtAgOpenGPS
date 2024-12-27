@@ -153,6 +153,7 @@ signals:
     void howManyPathsAwayChanged();
     void newModeChanged();
     void newNameChanged();
+    void newRefSideChanged();
 
 public slots:
     void reloadModel() {
