@@ -24,6 +24,7 @@
 
 
 class FormUDP;
+class BluetoothDeviceList;
 
 //in cs, the ipEndPoint is both the ip address and port.
 //cpp doesn't have that luxury, so we create a struct.
@@ -334,6 +335,8 @@ class FormLoop : public QObject
 
         void startBluetoothDiscovery();
     private:
+
+        BluetoothDeviceList *devList = nullptr;
         QBluetoothSocket *bluetoothSocket;
         QString btRawBuffer;
         void connectToBluetoothDevice(const QBluetoothDeviceInfo &device);

@@ -43,7 +43,6 @@ int main(int argc, char *argv[])
     settings->sync();
 
 
-    BluetoothDeviceList bluetoothDeviceList;
     FormLoop formLoop;
 	
 	return app.exec();

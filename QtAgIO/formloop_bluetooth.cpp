@@ -1,9 +1,7 @@
 #include "formloop.h"
-#include "bluetoothdevicelist.h"
 #include <QBluetoothDeviceDiscoveryAgent>
 #include <QBluetoothSocket>
-
-extern BluetoothDeviceList *bluetoothDeviceList;
+#include "bluetoothdevicelist.h"
 
 void FormLoop::startBluetoothDiscovery(){
     // Create a discovery agent and connect to its signals
@@ -19,9 +17,10 @@ void FormLoop::startBluetoothDiscovery(){
 // In your local slot, read information about the found devices
 void FormLoop::bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device)
 {
+    devList = new BluetoothDeviceList(this);
     qDebug() << "Found new device:" << device.name() << '(' << device.address().toString() << ')';
     //bluetoothDeviceList->addDevice(device.name(), device.address.toString());
-    bluetoothDeviceList->addDevice(device.name(), device.name());
+    devList->addDevice(device.name(), device.name());
     if(device.name() == "RTK_GNSS_305"){// hard coded for testing
         qDebug() << "RTK Device found!";
         connectToBluetoothDevice(device);
