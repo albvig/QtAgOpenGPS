@@ -20,8 +20,6 @@ void FormLoop::setupGUI()
     //Load the QML UI and display it in the main area of the GUI
     setProperty("title", "QtAgIO");
 
-    qmlRegisterType<BluetoothDeviceList>("org.agopengps.bluetooth", 1, 0, "BluetoothDeviceList");
-
 //tell the QML what OS we are using
 #ifdef __ANDROID__
     engine.rootContext()->setContextProperty("OS", "ANDROID");
@@ -35,6 +33,7 @@ void FormLoop::setupGUI()
     engine.rootContext()->setContextProperty("screenPixelDensity",QGuiApplication::primaryScreen()->physicalDotsPerInch() * QGuiApplication::primaryScreen()->devicePixelRatio());
     engine.rootContext()->setContextProperty("mainForm", this);
 	engine.rootContext()->setContextProperty("settings", &qml_settings);
+engine.rootContext()->setContextProperty("bluetoothDeviceList", devList);
 
 
 #ifdef LOCAL_QML

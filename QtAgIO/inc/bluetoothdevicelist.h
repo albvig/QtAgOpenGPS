@@ -3,6 +3,7 @@
 
 #include <QtCore>
 #include <QtGui>
+#include <QHash>
 
 class BluetoothDeviceList : public QAbstractListModel
 {
@@ -14,6 +15,8 @@ public:
     Q_INVOKABLE void addDevice(const QString &deviceName, const QString &deviceID);
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
+
+    QHash<int, QByteArray> roleNames() const;
 
 private:
     QList<QString> m_data;

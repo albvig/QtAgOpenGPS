@@ -17,12 +17,6 @@ void FormLoop::startBluetoothDiscovery(){
 // In your local slot, read information about the found devices
 void FormLoop::bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device)
 {
-
-    if (!devList) {  // Check if devList is null
-        devList = new BluetoothDeviceList(this);  // Create only if it doesn't exist
-    }
-
-    qDebug() << "Found new device:" << device.name() << '(' << device.address().toString() << ')';
     //bluetoothDeviceList->addDevice(device.name(), device.address.toString());
     devList->addDevice(device.name(), device.name());
     if(device.name() == "RTK_GNSS_305"){// hard coded for testing

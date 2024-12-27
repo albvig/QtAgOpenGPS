@@ -5,8 +5,6 @@ import QtQuick.Layouts
 import QtQml.Models
 import "components" as Comp
 
-import org.agopengps.bluetooth 1.0
-
 Window{
     id: bluetoothMenu
     title: qsTr("Bluetooth")
@@ -34,16 +32,20 @@ Window{
             }
         }
         ListView{
+            id: bluetoothDevices
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.left: search.right
             anchors.margins: 10
-            model: BluetoothDeviceList{}
-            /*delegate: ListDelegate{
+            model: bluetoothDeviceList
+            onModelChanged: console.log("model changed!")
+
+            delegate: Text{
                 text: model.display
             }
-            highlight: ListHighlight {}*/
+            //highlight: ListHighlight {}*/
+
         }
     }
 }

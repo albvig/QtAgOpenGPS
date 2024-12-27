@@ -336,7 +336,7 @@ class FormLoop : public QObject
         void startBluetoothDiscovery();
     private:
 
-        BluetoothDeviceList *devList = nullptr;
+        BluetoothDeviceList *devList;
         QBluetoothSocket *bluetoothSocket;
         QString btRawBuffer;
         void connectToBluetoothDevice(const QBluetoothDeviceInfo &device);

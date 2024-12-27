@@ -45,5 +45,13 @@ QVariant BluetoothDeviceList::data(const QModelIndex &index, int role) const
 }
 
 void BluetoothDeviceList::addDevice(const QString &deviceName, const QString &deviceID){
+    beginInsertRows(QModelIndex(), m_data.count(), m_data.count());
     m_data.append(deviceName);
+    endInsertRows();
 }
+QHash<int, QByteArray> BluetoothDeviceList::roleNames() const {
+    QHash<int, QByteArray> roles;
+    roles[Qt::DisplayRole] = "display"; // Map DisplayRole to "display"
+    return roles;
+}
+
