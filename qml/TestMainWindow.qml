@@ -32,8 +32,9 @@ Window {
     height: theme.defaultHeight
     width: theme.defaultWidth
 
-    property string prefix: "/"
+    property string prefix: "/home/torriem/projects/QtAgOpenGPS"
 
+    visible: true
     onVisibleChanged: if(settings.setDisplay_isStartFullScreen){
                           mainWindow.showMaximized()
                       }

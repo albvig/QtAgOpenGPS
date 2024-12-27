@@ -140,10 +140,15 @@ Window {
 
     /* only use in a mock setting.  Normally C++ will provide
        this as a CVehicle instance.
-    Interfaces.VehicleInterface {
+    MockVehicle {
         id: vehicleInterface
         objectName: "vehicleInterface"
-    }*/
+    }
+
+    MockTracks {
+        id: trk
+        }
+    */
 
     Interfaces.BoundaryInterface {
         id: boundaryInterface
