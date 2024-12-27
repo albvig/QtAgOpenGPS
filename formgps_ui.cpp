@@ -640,13 +640,13 @@ void FormGPS::onBtnManUTurn_clicked(bool right)
         yt.ResetYouTurn(makeUTurnCounter);
     }else {
         yt.isYouTurnTriggered = true;
-        yt.BuildManualYouTurn( right, true, vehicle, trk, ABLine, curve);
+        yt.BuildManualYouTurn( right, true, vehicle, trk);
    }
 }
 
 void FormGPS::onBtnLateral_clicked(bool right)
 {
-   yt.BuildManualYouLateral(right, vehicle, trk, ABLine, curve);
+   yt.BuildManualYouLateral(right, vehicle, trk);
 }
 
 void FormGPS::TimedMessageBox(int timeout, QString s1, QString s2)
