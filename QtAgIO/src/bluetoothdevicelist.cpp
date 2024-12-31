@@ -30,14 +30,12 @@ QVariant BluetoothDeviceList::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    // A model can return data for different roles.
-    // The default role is the display role.
-    // it can be accesses in QML with "model.display"
+    const DeviceInfo &device = m_data.at(row);
     switch(role) {
     case Qt::DisplayRole:
-        // Return the color name for the particular row
-        // Qt automatically converts it to the QVariant type
-        return m_data.value(row);
+        return QString("%1 (%2)").arg(device.name, device.id);
+    case Qt::UserRole:
+        return device.id;
     }
 
     // The view asked for other data, just return an empty QVariant
@@ -46,12 +44,13 @@ QVariant BluetoothDeviceList::data(const QModelIndex &index, int role) const
 
 void BluetoothDeviceList::addDevice(const QString &deviceName, const QString &deviceID){
     beginInsertRows(QModelIndex(), m_data.count(), m_data.count());
-    m_data.append(deviceName);
+    m_data.append({deviceName, deviceID});
     endInsertRows();
 }
 QHash<int, QByteArray> BluetoothDeviceList::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[Qt::DisplayRole] = "display"; // Map DisplayRole to "display"
+    roles[Qt::UserRole] = "id";
     return roles;
 }
 

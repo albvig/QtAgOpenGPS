@@ -19,7 +19,12 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
 private:
-    QList<QString> m_data;
+    struct DeviceInfo {
+        QString name;
+        QString id;
+    };
+
+    QList<DeviceInfo> m_data;
 
 };
 
