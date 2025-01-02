@@ -655,5 +655,6 @@
         <file>qml/config/steercomponents/MainConfigMainBtns.qml</file>
         <file>qml/config/steercomponents/MainConfigSecondaryBtns.qml</file>
         <file>icon.png</file>
+        <file>qml/TramIndicators.qml</file>
     </qresource>
 </RCC>
