@@ -27,4 +27,5 @@ void QMLSettings::setupKeys() {
     addKey(QString("setNTRIP_url"), QString("comm/ntripURL"), "QString");
     addKey(QString("run_isFirstRun"), QString("run/isFirstRun"), "bool");
     addKey(QString("setBluetooth_isOn"),QString("bluetooth/isOn"),"bool");
+    addKey(QString("setBluetooth_deviceList"), QString("bluetooth/deviceList"), "QStringList");
 }

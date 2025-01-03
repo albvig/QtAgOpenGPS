@@ -30,5 +30,6 @@ extern AgIOProperty property_setNTRIP_ipAddress;
 extern AgIOProperty property_setNTRIP_url;
 extern AgIOProperty property_run_isFirstRun;
 extern AgIOProperty property_setBluetooth_isOn;
+extern AgIOProperty property_setBluetooth_deviceList;
 
 #endif
