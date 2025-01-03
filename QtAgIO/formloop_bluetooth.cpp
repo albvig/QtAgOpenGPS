@@ -2,6 +2,7 @@
 #include <QBluetoothDeviceDiscoveryAgent>
 #include <QBluetoothSocket>
 #include "bluetoothdevicelist.h"
+#include "properties.h"
 
 void FormLoop::startBluetoothDiscovery(){
     // Create a discovery agent and connect to its signals
@@ -17,9 +18,10 @@ void FormLoop::startBluetoothDiscovery(){
 // In your local slot, read information about the found devices
 void FormLoop::bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device)
 {
-    devList->addDevice(device.name(), device.address().toString());
-    if(device.name() == "RTK_GNSS_305"){// hard coded for testing
-        qDebug() << "RTK Device found!";
+    devList->addDevice(device.name());
+    QStringList deviceList = property_setBluetooth_deviceList.value().toStringList();
+    if(deviceList.contains(device.name())){// hard coded for testing
+        qDebug() << "Bluetooth Device found!";
         connectToBluetoothDevice(device);
     }
 }
@@ -31,8 +33,21 @@ void FormLoop::connectToBluetoothDevice(const QBluetoothDeviceInfo &device){
     address = device.address();
     //uuid = device.deviceUuid();
 
+    //this section adds every device we try to connect to to a list that we automatically try to
+    //connect to every time
+    QString nameStr = device.name(); // Convert address to string
+
+    //create a stringlist to hold the property
+    QStringList deviceList = property_setBluetooth_deviceList.value().toStringList();
+    // Check if address is already in the property list
+    if (!deviceList.contains(nameStr)) {
+        deviceList.append(nameStr); // Add if not present
+        //set the property to the stringlist
+        property_setBluetooth_deviceList = deviceList;
+    }
     qDebug() << "Attempting to connect to ";
-    qDebug() << address << " " << uuid;
+    qDebug() << device.name();
+
     bluetoothSocket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol, this);
 
     connect(bluetoothSocket, SIGNAL(connected()), this, SLOT(bluetoothConnected()));
@@ -57,4 +72,6 @@ void FormLoop::readBluetoothData(){
 
 void FormLoop::bluetoothDiscoveryFinished(){
     agio->setProperty("searchingForBluetooth", false);
+    qDebug() << "bt disc finished";
+    startBluetoothDiscovery();
 }
