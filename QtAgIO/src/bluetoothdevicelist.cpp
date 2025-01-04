@@ -17,15 +17,15 @@ int BluetoothDeviceList::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
 
-    return m_data.count();
+    return devices_list.count();
 }
 
 // Get device name at specific row
 QString BluetoothDeviceList::get(int row) const
 {
-    if (row < 0 || row >= m_data.count())
+    if (row < 0 || row >= devices_list.count())
         return QString();
-    return m_data.at(row);
+    return devices_list.at(row);
 }
 
 QVariant BluetoothDeviceList::data(const QModelIndex &index, int role) const
@@ -35,13 +35,13 @@ QVariant BluetoothDeviceList::data(const QModelIndex &index, int role) const
     int row = index.row();
 
     // boundary check for the row
-    if(row < 0 || row >= m_data.count()) {
+    if(row < 0 || row >= devices_list.count()) {
         return QVariant();
     }
 
     switch(role) {
     case Qt::DisplayRole:
-        return m_data.value(row);
+        return devices_list.value(row);
     }
 
     // The view asked for other data, just return an empty QVariant
@@ -49,15 +49,15 @@ QVariant BluetoothDeviceList::data(const QModelIndex &index, int role) const
 }
 
 void BluetoothDeviceList::addDevice(const QString &deviceName){
-    beginInsertRows(QModelIndex(), m_data.count(), m_data.count());
-    m_data.append(deviceName);
+    beginInsertRows(QModelIndex(), devices_list.count(), devices_list.count());
+    devices_list.append(deviceName);
     endInsertRows();
 
     emit modelChanged();
 }
 
 void BluetoothDeviceList::clear(){
-    m_data.clear();
+    devices_list.clear();
     emit modelChanged();
 }
 
