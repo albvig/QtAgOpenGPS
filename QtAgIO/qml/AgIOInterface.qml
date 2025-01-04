@@ -77,6 +77,7 @@ Item {
 
     //bluetooth
     signal bt_search()
+    signal bt_kill()
     property bool searchingForBluetooth: false
 
 }
