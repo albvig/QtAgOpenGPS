@@ -13,6 +13,7 @@ public:
     ~BluetoothDeviceList();
 
     Q_INVOKABLE void addDevice(const QString &deviceName);
+    Q_INVOKABLE void clear();
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
 

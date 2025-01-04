@@ -5,6 +5,10 @@
 #include "properties.h"
 
 void FormLoop::startBluetoothDiscovery(){
+
+    //empty device list
+    devList->clear();
+
     // Create a discovery agent and connect to its signals
     QBluetoothDeviceDiscoveryAgent *discoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
     connect(discoveryAgent, SIGNAL(deviceDiscovered(QBluetoothDeviceInfo)),
@@ -72,6 +76,5 @@ void FormLoop::readBluetoothData(){
 
 void FormLoop::bluetoothDiscoveryFinished(){
     agio->setProperty("searchingForBluetooth", false);
-    qDebug() << "bt disc finished";
     startBluetoothDiscovery();
 }

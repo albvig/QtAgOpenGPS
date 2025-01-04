@@ -56,3 +56,8 @@ void BluetoothDeviceList::addDevice(const QString &deviceName){
     emit modelChanged();
 }
 
+void BluetoothDeviceList::clear(){
+    m_data.clear();
+    emit modelChanged();
+}
+
