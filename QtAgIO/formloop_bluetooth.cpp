@@ -24,6 +24,10 @@ void FormLoop::bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device)
 {
     btDevicesList->addDevice(device.name());
     QStringList deviceList = property_setBluetooth_deviceList.value().toStringList();
+
+    //check if we are already connected
+    if(connectedBTDevices.contains(device.name())) return;
+
     if(deviceList.contains(device.name())){
         qDebug() << "Bluetooth Device found!";
         connectToBluetoothDevice(device);
@@ -42,15 +46,24 @@ void FormLoop::connectToBluetoothDevice(const QBluetoothDeviceInfo &device){
 
     bluetoothSocket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol, this);
 
-    connect(bluetoothSocket, SIGNAL(connected()), this, SLOT(bluetoothConnected()));
-
+    connect(bluetoothSocket, &QBluetoothSocket::connected, this, [this, device]() {
+        bluetoothConnected(device);  // Pass device to bluetoothConnected
+    });
+    connect(bluetoothSocket, &QBluetoothSocket::disconnected, this, [this, device]() {
+        bluetoothDisconnected(device);  // Optionally pass device to bluetoothDisconnected
+    });
     connect(bluetoothSocket, SIGNAL(readyRead()), this, SLOT(readBluetoothData()));
     bluetoothSocket->connectToService(address, uuid, QIODeviceBase::ReadOnly);
 }
 
-void FormLoop::bluetoothConnected(){
-    qDebug() << "Connected to bluetooth device!";
+void FormLoop::bluetoothConnected(const QBluetoothDeviceInfo &device){
+    qDebug() << "Connected to bluetooth device " << device.name();
+    connectedBTDevices.append(device.name());
     qDebug() << "Waiting for incoming data...";
+}
+void FormLoop::bluetoothDisconnected(const QBluetoothDeviceInfo &device){
+    TimedMessageBox(2000, "Bluetooth Device Disconnected!", "Disconnected from device " + device.name());
+    connectedBTDevices.removeAll(device.name());
 }
 
 void FormLoop::readBluetoothData(){
