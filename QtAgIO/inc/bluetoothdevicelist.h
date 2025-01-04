@@ -12,19 +12,14 @@ public:
     explicit BluetoothDeviceList(QObject *parent = 0);
     ~BluetoothDeviceList();
 
-    Q_INVOKABLE void addDevice(const QString &deviceName, const QString &deviceID);
+    Q_INVOKABLE void addDevice(const QString &deviceName);
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
 
-    QHash<int, QByteArray> roleNames() const;
-
-private:
-    struct DeviceInfo {
-        QString name;
-        QString id;
-    };
-
-    QList<DeviceInfo> m_data;
+    QList<QString> m_data;
+    Q_INVOKABLE QString get(int row) const;
+signals:
+    void modelChanged();
 
 };
 
