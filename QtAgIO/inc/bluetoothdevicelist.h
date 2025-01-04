@@ -19,6 +19,9 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
     QList<QString> m_data;
+    Q_INVOKABLE QString get(int row) const;
+signals:
+    void modelChanged();
 
 };
 
