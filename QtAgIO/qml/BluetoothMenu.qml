@@ -35,7 +35,7 @@ Window{
 
     Comp.TitleFrame{
         id: devicesTitleFrame
-        title: qsTr("Devices")
+        title: qsTr("Connect to Devices:")
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -95,8 +95,6 @@ Window{
                 }
             }
             function update_list(){
-                console.log("Model changed!")
-
                 // Clear the QML model
                 deviceListModel.clear()
 
@@ -104,7 +102,6 @@ Window{
                 for (let i = 0; i < bluetoothDeviceList.rowCount(); ++i) {
                     let name = bluetoothDeviceList.get(i); // Fetch name
                     deviceListModel.append({"name": name}); // Append to QML model
-                    console.log(name);
                 }
 
             }
