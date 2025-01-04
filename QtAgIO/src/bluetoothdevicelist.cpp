@@ -55,9 +55,4 @@ void BluetoothDeviceList::addDevice(const QString &deviceName){
 
     emit modelChanged();
 }
-QHash<int, QByteArray> BluetoothDeviceList::roleNames() const {
-    QHash<int, QByteArray> roles;
-    roles[Qt::DisplayRole] = "display"; // Map DisplayRole to "display"
-    return roles;
-}
 

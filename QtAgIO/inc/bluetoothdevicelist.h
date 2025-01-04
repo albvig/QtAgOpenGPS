@@ -16,8 +16,6 @@ public:
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
 
-    QHash<int, QByteArray> roleNames() const;
-
     QList<QString> m_data;
     Q_INVOKABLE QString get(int row) const;
 signals:
