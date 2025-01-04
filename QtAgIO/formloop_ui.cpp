@@ -33,7 +33,7 @@ void FormLoop::setupGUI()
     engine.rootContext()->setContextProperty("screenPixelDensity",QGuiApplication::primaryScreen()->physicalDotsPerInch() * QGuiApplication::primaryScreen()->devicePixelRatio());
     engine.rootContext()->setContextProperty("mainForm", this);
 	engine.rootContext()->setContextProperty("settings", &qml_settings);
-engine.rootContext()->setContextProperty("bluetoothDeviceList", devList);
+engine.rootContext()->setContextProperty("bluetoothDeviceList", btDevicesList);
 
 
 #ifdef LOCAL_QML

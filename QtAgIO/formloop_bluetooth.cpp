@@ -7,7 +7,7 @@
 void FormLoop::startBluetoothDiscovery(){
 
     //empty device list
-    devList->clear();
+    btDevicesList->clear();
 
     // Create a discovery agent and connect to its signals
     QBluetoothDeviceDiscoveryAgent *discoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
@@ -22,7 +22,7 @@ void FormLoop::startBluetoothDiscovery(){
 // In your local slot, read information about the found devices
 void FormLoop::bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device)
 {
-    devList->addDevice(device.name());
+    btDevicesList->addDevice(device.name());
     QStringList deviceList = property_setBluetooth_deviceList.value().toStringList();
     if(deviceList.contains(device.name())){// hard coded for testing
         qDebug() << "Bluetooth Device found!";

@@ -17,7 +17,7 @@ FormLoop::FormLoop(QObject *parent) : QObject(parent),
 	qml_settings.setupKeys();
 	qml_settings.loadSettings();
 
-    devList = new BluetoothDeviceList(this);// I don't like this, but right now, the class
+    btDevicesList = new BluetoothDeviceList(this);// I don't like this, but right now, the class
     //has to be in place when the QML starts.
 
 
