@@ -75,16 +75,10 @@ Window{
                             var nameStr = model.name;  // name to add
 
                             // Check if the name is already in the list
-                            if (deviceList.indexOf(nameStr) === -1) {
+                            if (deviceList.indexOf(nameStr) === -1)
                                 deviceList.push(nameStr);  // Append if not already present
-                                console.log("Added: " + nameStr);
-                            } else {
-                                console.log(nameStr + " is already in the list.");
-                            }
 
-                            console.log("Current device list: " + deviceList);
-
-                            settings.setBluetooth_deviceList = deviceList
+                            settings.setBluetooth_deviceList = deviceList // save to settings
                             //start the search process
                             agio.bt_search()
                         }
