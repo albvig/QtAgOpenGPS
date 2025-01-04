@@ -24,7 +24,7 @@ void FormLoop::bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device)
 {
     btDevicesList->addDevice(device.name());
     QStringList deviceList = property_setBluetooth_deviceList.value().toStringList();
-    if(deviceList.contains(device.name())){// hard coded for testing
+    if(deviceList.contains(device.name())){
         qDebug() << "Bluetooth Device found!";
         connectToBluetoothDevice(device);
     }
@@ -37,18 +37,6 @@ void FormLoop::connectToBluetoothDevice(const QBluetoothDeviceInfo &device){
     address = device.address();
     //uuid = device.deviceUuid();
 
-    //this section adds every device we try to connect to to a list that we automatically try to
-    //connect to every time
-    QString nameStr = device.name(); // Convert address to string
-
-    //create a stringlist to hold the property
-    QStringList deviceList = property_setBluetooth_deviceList.value().toStringList();
-    // Check if address is already in the property list
-    if (!deviceList.contains(nameStr)) {
-        deviceList.append(nameStr); // Add if not present
-        //set the property to the stringlist
-        property_setBluetooth_deviceList = deviceList;
-    }
     qDebug() << "Attempting to connect to ";
     qDebug() << device.name();
 
