@@ -17,7 +17,6 @@ void FormLoop::startBluetoothDiscovery(){
 
     // Start a discovery
     discoveryAgent->start();
-    agio->setProperty("searchingForBluetooth", true);
 }
 // In your local slot, read information about the found devices
 void FormLoop::bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device)
@@ -59,11 +58,13 @@ void FormLoop::connectToBluetoothDevice(const QBluetoothDeviceInfo &device){
 void FormLoop::bluetoothConnected(const QBluetoothDeviceInfo &device){
     qDebug() << "Connected to bluetooth device " << device.name();
     connectedBTDevices.append(device.name());
+    agio->setProperty("connectedBTDevices", connectedBTDevices);
     qDebug() << "Waiting for incoming data...";
 }
 void FormLoop::bluetoothDisconnected(const QBluetoothDeviceInfo &device){
     TimedMessageBox(2000, "Bluetooth Device Disconnected!", "Disconnected from device " + device.name());
     connectedBTDevices.removeAll(device.name());
+    agio->setProperty("connectedBTDevices", connectedBTDevices);
 }
 
 void FormLoop::readBluetoothData(){
@@ -76,6 +77,5 @@ void FormLoop::readBluetoothData(){
 }
 
 void FormLoop::bluetoothDiscoveryFinished(){
-    agio->setProperty("searchingForBluetooth", false);
     startBluetoothDiscovery();
 }
