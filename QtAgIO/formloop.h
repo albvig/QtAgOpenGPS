@@ -329,18 +329,21 @@ class FormLoop : public QObject
 
         //Bluetooth
         void bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device);
-        void bluetoothConnected(const QBluetoothDeviceInfo &device);
-        void bluetoothDisconnected(const QBluetoothDeviceInfo &device);
+        void bluetoothConnected();
+        void bluetoothDisconnected();
         void readBluetoothData();
         void bluetoothDiscoveryFinished();
-
+        void onSocketErrorOccurred(QBluetoothSocket::SocketError error);
         void startBluetoothDiscovery();
+
     private:
 
-        BluetoothDeviceList *btDevicesList;
+        BluetoothDeviceList *btDevicesList;// for sending the list to frontend
         QBluetoothSocket *bluetoothSocket;
         QString btRawBuffer;
-        QStringList connectedBTDevices;
+        bool bluetoothDeviceConnecting = false;
+        bool bluetoothDeviceConnected = false;
+        QString btConnectedDeviceName;
         void connectToBluetoothDevice(const QBluetoothDeviceInfo &device);
 };
 
