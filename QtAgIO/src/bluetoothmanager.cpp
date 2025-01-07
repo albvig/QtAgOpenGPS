@@ -79,7 +79,8 @@ void BluetoothManager::connected(){
     qDebug() << "Waiting for incoming data...";
 }
 void BluetoothManager::disconnected(){
-    formLoop->TimedMessageBox(2000, "Bluetooth Device Disconnected!", "Disconnected from device " + connectedDeviceName);
+
+    if(!stiflePopup) formLoop->TimedMessageBox(2000, "Bluetooth Device Disconnected!", "Disconnected from device " + connectedDeviceName);
     deviceConnected = false;
     deviceConnecting = false;
     connectedDeviceName.clear();
@@ -109,6 +110,7 @@ void BluetoothManager::onSocketErrorOccurred(QBluetoothSocket::SocketError error
         //this is because a paired device that is not connected will show up as an available device
         //when "searching" for devices
         devicesNotAvailable.append(connectedDeviceName);
+        stiflePopup = true;
         socket->disconnectFromService();
         break;
     case QBluetoothSocket::SocketError::ServiceNotFoundError:

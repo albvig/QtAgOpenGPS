@@ -26,6 +26,7 @@ private:
     QString rawBuffer;
 
     QStringList devicesNotAvailable;
+    bool stiflePopup = false;
 
     bool deviceConnected = false;
     bool deviceConnecting = false;
