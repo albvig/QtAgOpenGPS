@@ -15,7 +15,8 @@ void BluetoothManager::startBluetoothDiscovery(){
     formLoop->btDevicesList->clear();
 
     // Create a discovery agent and connect to its signals
-    QBluetoothDeviceDiscoveryAgent *discoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
+    discoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
+
     connect(discoveryAgent, SIGNAL(deviceDiscovered(QBluetoothDeviceInfo)),
             this, SLOT(deviceDiscovered(QBluetoothDeviceInfo)));
     connect(discoveryAgent, SIGNAL(finished()), this, SLOT(discoveryFinished()));
@@ -26,6 +27,8 @@ void BluetoothManager::startBluetoothDiscovery(){
 // In your local slot, read information about the found devices
 void BluetoothManager::deviceDiscovered(const QBluetoothDeviceInfo &device)
 {
+    if(devicesNotAvailable.contains(device.name())) return;
+
     formLoop->btDevicesList->addDevice(device.name());
 
     //check if we are already connected or connecting
@@ -66,17 +69,25 @@ void BluetoothManager::connectToDevice(const QBluetoothDeviceInfo &device){
 }
 
 void BluetoothManager::connected(){
-    qDebug() << "Connected to bluetooth device " << connectedDeviceName;
     deviceConnecting = false;
     deviceConnected = true;
+
+    devicesNotAvailable.clear(); // reset so we start over when connection is lost
+
     formLoop->agio->setProperty("connectedBTDevices", connectedDeviceName);
+
     qDebug() << "Waiting for incoming data...";
 }
 void BluetoothManager::disconnected(){
     formLoop->TimedMessageBox(2000, "Bluetooth Device Disconnected!", "Disconnected from device " + connectedDeviceName);
     deviceConnected = false;
+    deviceConnecting = false;
     connectedDeviceName.clear();
     formLoop->agio->setProperty("connectedBTDevices", ""); // tell the frontend nothing is connected
+    //restart the discoveryAgent
+
+    discoveryAgent->stop();
+    discoveryAgent->start();
 }
 
 void BluetoothManager::readData(){
@@ -87,6 +98,7 @@ void BluetoothManager::readData(){
 }
 
 void BluetoothManager::discoveryFinished(){
+    devicesNotAvailable.clear(); //completely start over
     startBluetoothDiscovery();
 }
 void BluetoothManager::onSocketErrorOccurred(QBluetoothSocket::SocketError error) {
@@ -94,6 +106,10 @@ void BluetoothManager::onSocketErrorOccurred(QBluetoothSocket::SocketError error
     switch (error) {
     case QBluetoothSocket::SocketError::HostNotFoundError:
         qDebug() << "Error: Host not found for device" << connectedDeviceName;
+        //this is because a paired device that is not connected will show up as an available device
+        //when "searching" for devices
+        devicesNotAvailable.append(connectedDeviceName);
+        socket->disconnectFromService();
         break;
     case QBluetoothSocket::SocketError::ServiceNotFoundError:
         qDebug() << "Error: Service not found for device" << connectedDeviceName;

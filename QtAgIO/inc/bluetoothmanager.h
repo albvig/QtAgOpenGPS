@@ -20,9 +20,12 @@ public slots:
 
 private:
     QBluetoothSocket *socket;
+    QBluetoothDeviceDiscoveryAgent *discoveryAgent;
 
     QString connectedDeviceName;
     QString rawBuffer;
+
+    QStringList devicesNotAvailable;
 
     bool deviceConnected = false;
     bool deviceConnecting = false;
