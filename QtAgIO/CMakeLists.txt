@@ -25,7 +25,6 @@ qt_add_executable(QtAgIO
     formloop_ntripcomm.cpp
     formloop_ui.cpp
     formloop_settings.cpp
-    formloop_bluetooth.cpp
     properties.h
     qmlsettings.h qmlsettings.cpp
     qmlsettings_addkeys.cpp
@@ -34,6 +33,7 @@ qt_add_executable(QtAgIO
     inc/CTraffic.h src/CTraffic.cpp
     inc/CScanReply.h src/CScanReply.cpp
     inc/bluetoothdevicelist.h src/bluetoothdevicelist.cpp
+    inc/bluetoothmanager.h src/bluetoothmanager.cpp
     interfaceproperty.h
 )
 

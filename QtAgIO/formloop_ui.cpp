@@ -12,6 +12,7 @@
 #include <QDir>
 #include "agioproperty.h"
 #include "bluetoothdevicelist.h"
+#include "bluetoothmanager.h"
 
 extern QMLSettings qml_settings;
 
@@ -114,7 +115,7 @@ engine.rootContext()->setContextProperty("bluetoothDeviceList", btDevicesList);
     connect(agio, SIGNAL(setIPFromUrl(QString)), this, SLOT(LookupNTripIP(QString)));
 
     //bluetooth
-    connect(agio, SIGNAL(bt_search()), this, SLOT(startBluetoothDiscovery()));
+    connect(agio, SIGNAL(bt_search()), bluetoothManager, SLOT(startBluetoothDiscovery()));
 
 
 }

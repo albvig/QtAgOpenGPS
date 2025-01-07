@@ -19,12 +19,11 @@
 #include <QQueue>
 #include <QDateTime>
 #include <QElapsedTimer>
-#include <QBluetoothDeviceInfo>
-#include <QBluetoothSocket>
 
 
 class FormUDP;
 class BluetoothDeviceList;
+class BluetoothManager;
 
 //in cs, the ipEndPoint is both the ip address and port.
 //cpp doesn't have that luxury, so we create a struct.
@@ -327,24 +326,10 @@ class FormLoop : public QObject
         void ConfigureNTRIP();
         void NTRIPDebugMode(bool doWeDebug);
 
-        //Bluetooth
-        void bluetoothDeviceDiscovered(const QBluetoothDeviceInfo &device);
-        void bluetoothConnected();
-        void bluetoothDisconnected();
-        void readBluetoothData();
-        void bluetoothDiscoveryFinished();
-        void onSocketErrorOccurred(QBluetoothSocket::SocketError error);
-        void startBluetoothDiscovery();
-
     private:
-
+        BluetoothManager* bluetoothManager;
+    public:
         BluetoothDeviceList *btDevicesList;// for sending the list to frontend
-        QBluetoothSocket *bluetoothSocket;
-        QString btRawBuffer;
-        bool bluetoothDeviceConnecting = false;
-        bool bluetoothDeviceConnected = false;
-        QString btConnectedDeviceName;
-        void connectToBluetoothDevice(const QBluetoothDeviceInfo &device);
 };
 
 

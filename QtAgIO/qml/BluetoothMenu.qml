@@ -13,7 +13,7 @@ Window{
 
     Comp.TitleFrame{
         id: devicesTitleFrame
-        title: qsTr("Connect to Devices:")
+        title: qsTr("Connect to Device:")
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
