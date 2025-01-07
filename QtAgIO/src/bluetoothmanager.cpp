@@ -80,8 +80,6 @@ void BluetoothManager::connected(){
 }
 void BluetoothManager::disconnected(){
 
-    if(!stiflePopup) formLoop->TimedMessageBox(2000, "Bluetooth Device Disconnected!", "Disconnected from device " + connectedDeviceName);
-    deviceConnected = false;
     deviceConnecting = false;
     connectedDeviceName.clear();
     formLoop->agio->setProperty("connectedBTDevices", ""); // tell the frontend nothing is connected
@@ -89,6 +87,11 @@ void BluetoothManager::disconnected(){
 
     discoveryAgent->stop();
     discoveryAgent->start();
+    if(deviceConnected) {
+        startBluetoothDiscovery();
+        formLoop->TimedMessageBox(2000, "Bluetooth Device Disconnected!", "Disconnected from device " + connectedDeviceName);
+    }
+    deviceConnected = false;
 }
 
 void BluetoothManager::readData(){
@@ -100,7 +103,7 @@ void BluetoothManager::readData(){
 
 void BluetoothManager::discoveryFinished(){
     devicesNotAvailable.clear(); //completely start over
-    startBluetoothDiscovery();
+    if(!deviceConnected) startBluetoothDiscovery();
 }
 void BluetoothManager::onSocketErrorOccurred(QBluetoothSocket::SocketError error) {
     // Handle different error cases
@@ -110,7 +113,6 @@ void BluetoothManager::onSocketErrorOccurred(QBluetoothSocket::SocketError error
         //this is because a paired device that is not connected will show up as an available device
         //when "searching" for devices
         devicesNotAvailable.append(connectedDeviceName);
-        stiflePopup = true;
         socket->disconnectFromService();
         break;
     case QBluetoothSocket::SocketError::ServiceNotFoundError:
