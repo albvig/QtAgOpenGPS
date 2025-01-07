@@ -5,6 +5,7 @@
 #include <QQmlApplicationEngine>
 #include "qmlsettings.h"
 #include "bluetoothdevicelist.h"
+#include "bluetoothmanager.h"
 
 extern QMLSettings qml_settings;
 FormLoop::FormLoop(QObject *parent) : QObject(parent),
@@ -20,6 +21,7 @@ FormLoop::FormLoop(QObject *parent) : QObject(parent),
     btDevicesList = new BluetoothDeviceList(this);// I don't like this, but right now, the class
     //has to be in place when the QML starts.
 
+    bluetoothManager = new BluetoothManager(this, this);
 
 	setupGUI();
 	loadSettings();
@@ -29,7 +31,7 @@ FormLoop::FormLoop(QObject *parent) : QObject(parent),
 	LoadUDPNetwork();
 
     if(property_setBluetooth_isOn)
-        startBluetoothDiscovery();
+        bluetoothManager->startBluetoothDiscovery();
 
    //buffer.resize(1024);
     ConfigureNTRIP();
