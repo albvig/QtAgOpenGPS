@@ -18,6 +18,8 @@ public:
     void startBluetoothDiscovery();
 public slots:
     void userConnectBluetooth(const QString &device);
+    void userRemoveDevice(const QString &device);
+    void kill();
 
 private:
     QBluetoothSocket *socket;

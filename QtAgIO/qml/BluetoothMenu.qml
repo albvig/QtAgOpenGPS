@@ -10,6 +10,58 @@ Window{
     title: qsTr("Bluetooth")
     width: 500
     height: 500
+    Comp.TitleFrame{
+        id: knownTitleFrame
+        title: qsTr("Known Devices (Click to remove)")
+        anchors.left: parent.left
+        anchors.top: parent.verticalCenter
+        anchors.bottom: parent.bottom
+        anchors.right: parent.horizontalCenter
+        anchors.margins: 10
+        border.width: 2
+        ListView{
+            property var deviceList: settings.setBluetooth_deviceList
+            id: knownDevicesList
+            anchors.fill: parent
+            Connections {
+                target: settings
+                function onSetBluetooth_deviceListChanged() {
+                    var rawList = settings.setBluetooth_deviceList;
+                    knownDevicesList.model = Array.isArray(rawList) ? rawList : [rawList];
+                    console.log("modelchanged")
+                }
+            }
+            Component.onCompleted: {
+                var rawList = settings.setBluetooth_deviceList;
+                knownDevicesList.model = Array.isArray(rawList) ? rawList : [rawList];
+            }
+
+            model: deviceList
+
+            delegate: RadioButton{
+                width: knownDevicesList.width
+                id: knownControl
+
+                indicator: Rectangle{
+                    anchors.fill: parent
+                    color: knownControl.down ? "blue" : devicesTitleFrame.color
+                    visible: true
+                    anchors.margins: 5
+                    border.color: "black"
+                    border.width: 1
+                    radius: 3
+                    Text{
+                        text: modelData
+                        anchors.centerIn: parent
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: agio.bt_remove_device(modelData)
+                    }
+                }
+            }
+        }
+    }
 
     Comp.TitleFrame{
         id: devicesTitleFrame
@@ -46,22 +98,7 @@ Window{
                     }
                     MouseArea{
                         anchors.fill: parent
-                        onClicked: {
-                            //add the name of device to list of hosts we want to connect to
-                            var deviceList = settings.setBluetooth_deviceList
-                            console.log(settings.setBluetooth_deviceList)
-
-                            var nameStr = model.name;  // name to add
-
-                            /*// Check if the name is already in the list
-                            if (deviceList.indexOf(nameStr) === -1)
-                                deviceList.push(nameStr);  // Append if not already present
-
-                            settings.setBluetooth_deviceList = deviceList // save to settings
-                            */
-                            //start the search process
-                            agio.bt_search(model.name)
-                        }
+                        onClicked: agio.bt_search(model.name)
                     }
                 }
             }

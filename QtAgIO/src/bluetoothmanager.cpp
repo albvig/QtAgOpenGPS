@@ -120,7 +120,8 @@ void BluetoothManager::readData(){
 
 void BluetoothManager::discoveryFinished(){
     devicesNotAvailable.clear(); //completely start over
-    if(!deviceConnected) startBluetoothDiscovery();
+    //make sure we are not connected, and that the user didn't shut off bluetooth
+    if(!deviceConnected && property_setBluetooth_isOn) startBluetoothDiscovery();
 }
 void BluetoothManager::onSocketErrorOccurred(QBluetoothSocket::SocketError error) {
     // Handle different error cases
@@ -150,4 +151,19 @@ void BluetoothManager::userConnectBluetooth(const QString &device){
     devicesUserWants.append(device);
     qDebug() << devicesUserWants;
     startBluetoothDiscovery();
+}
+
+void BluetoothManager::userRemoveDevice(const QString &device){
+    qDebug() << "userRemoveDevice: " << device;
+    if (connectedDeviceName == device) socket->disconnectFromService();
+
+    if(deviceList.contains(device)){
+        deviceList.removeAll(device);
+        property_setBluetooth_deviceList = deviceList;
+    }
+}
+
+void BluetoothManager::kill(){
+    socket->disconnectFromService();
+    property_setBluetooth_isOn = false;
 }
