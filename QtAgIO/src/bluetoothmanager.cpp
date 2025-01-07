@@ -86,6 +86,10 @@ void BluetoothManager::disconnected(){
     //restart the discoveryAgent
 
     discoveryAgent->stop();
+
+    //empty device list
+    formLoop->btDevicesList->clear();
+
     discoveryAgent->start();
     if(deviceConnected) {
         startBluetoothDiscovery();
