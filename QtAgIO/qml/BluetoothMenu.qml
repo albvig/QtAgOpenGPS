@@ -49,16 +49,18 @@ Window{
                         onClicked: {
                             //add the name of device to list of hosts we want to connect to
                             var deviceList = settings.setBluetooth_deviceList
+                            console.log(settings.setBluetooth_deviceList)
 
                             var nameStr = model.name;  // name to add
 
-                            // Check if the name is already in the list
+                            /*// Check if the name is already in the list
                             if (deviceList.indexOf(nameStr) === -1)
                                 deviceList.push(nameStr);  // Append if not already present
 
                             settings.setBluetooth_deviceList = deviceList // save to settings
+                            */
                             //start the search process
-                            agio.bt_search()
+                            agio.bt_search(model.name)
                         }
                     }
                 }

@@ -15,8 +15,9 @@ private:
 
 public:
     explicit BluetoothManager(FormLoop* loop, QObject* parent = nullptr);    ~BluetoothManager();
-public slots:
     void startBluetoothDiscovery();
+public slots:
+    void userConnectBluetooth(const QString &device);
 
 private:
     QBluetoothSocket *socket;
@@ -26,6 +27,9 @@ private:
     QString rawBuffer;
 
     QStringList devicesNotAvailable;
+
+    QStringList devicesUserWants;
+    QStringList deviceList;
 
     bool deviceConnected = false;
     bool deviceConnecting = false;

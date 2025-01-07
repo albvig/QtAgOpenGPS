@@ -115,7 +115,7 @@ engine.rootContext()->setContextProperty("bluetoothDeviceList", btDevicesList);
     connect(agio, SIGNAL(setIPFromUrl(QString)), this, SLOT(LookupNTripIP(QString)));
 
     //bluetooth
-    connect(agio, SIGNAL(bt_search()), bluetoothManager, SLOT(startBluetoothDiscovery()));
+    connect(agio, SIGNAL(bt_search(QString)), bluetoothManager, SLOT(userConnectBluetooth(QString)));
 
 
 }

@@ -76,7 +76,7 @@ Item {
     signal btnUDPListenOnly_clicked(bool isIt);
 
     //bluetooth
-    signal bt_search()
+    signal bt_search(string device)
     signal bt_kill()
     property string connectedBTDevices: ""
 

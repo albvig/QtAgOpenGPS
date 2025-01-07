@@ -34,12 +34,21 @@ void BluetoothManager::deviceDiscovered(const QBluetoothDeviceInfo &device)
     //check if we are already connected or connecting
     if(deviceConnected || deviceConnecting) return;
 
-    QStringList deviceList = property_setBluetooth_deviceList.value().toStringList();
+    deviceList = property_setBluetooth_deviceList.value().toStringList();
+
+    qDebug() << device.name();
+    if(devicesUserWants.contains(device.name())){
+        qDebug() << "Bluetooth Device usr found!";
+        connectToDevice(device);
+        return;
+    }
 
     if(deviceList.contains(device.name())){
         qDebug() << "Bluetooth Device found!";
         connectToDevice(device);
+        return;
     }
+
 }
 
 void BluetoothManager::connectToDevice(const QBluetoothDeviceInfo &device){
@@ -69,6 +78,10 @@ void BluetoothManager::connectToDevice(const QBluetoothDeviceInfo &device){
 }
 
 void BluetoothManager::connected(){
+    if(!deviceList.contains(connectedDeviceName)){
+        deviceList.append(connectedDeviceName);
+        property_setBluetooth_deviceList = deviceList;
+    }
     deviceConnecting = false;
     deviceConnected = true;
 
@@ -131,4 +144,10 @@ void BluetoothManager::onSocketErrorOccurred(QBluetoothSocket::SocketError error
     default:
         qDebug() << "Error: Unknown error occurred for device" << connectedDeviceName << "Error code:" << error;
     }
+}
+
+void BluetoothManager::userConnectBluetooth(const QString &device){
+    devicesUserWants.append(device);
+    qDebug() << devicesUserWants;
+    startBluetoothDiscovery();
 }
