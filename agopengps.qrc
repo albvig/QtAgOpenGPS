@@ -656,5 +656,6 @@
         <file>qml/config/steercomponents/MainConfigSecondaryBtns.qml</file>
         <file>icon.png</file>
         <file>qml/MainTopPanel.qml</file>
+        <file>qml/MainLeftColumn.qml</file>
     </qresource>
 </RCC>
