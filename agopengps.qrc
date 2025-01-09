@@ -660,5 +660,6 @@
         <file>qml/MainRightColumn.qml</file>
         <file>qml/MainBottomRow.qml</file>
         <file>qml/AutoUturnBtn.qml</file>
+        <file>qml/ManualTurnBtns.qml</file>
     </qresource>
 </RCC>
