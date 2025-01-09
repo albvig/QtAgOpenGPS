@@ -66,8 +66,6 @@ ColumnLayout {
     Comp.IconButton{
         id: btnTrackCycle
         icon.source: prefix + "/images/ABLineCycle.png"
-        width: btnTrack.width
-        height: btnTrack.height
         Layout.alignment: Qt.AlignCenter
         implicitWidth: theme.buttonSize
         implicitHeight: theme.buttonSize
@@ -75,8 +73,6 @@ ColumnLayout {
     Comp.IconButton{
         id: btnTrackCycleBk
         icon.source: prefix + "/images/ABLineCycleBk.png"
-        width: btnTrack.width
-        height: btnTrack.height
         Layout.alignment: Qt.AlignCenter
         implicitWidth: theme.buttonSize
         implicitHeight: theme.buttonSize

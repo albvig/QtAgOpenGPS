@@ -658,5 +658,6 @@
         <file>qml/MainTopPanel.qml</file>
         <file>qml/MainLeftColumn.qml</file>
         <file>qml/MainRightColumn.qml</file>
+        <file>qml/MainBottomRow.qml</file>
     </qresource>
 </RCC>
