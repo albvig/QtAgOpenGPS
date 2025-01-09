@@ -657,5 +657,6 @@
         <file>icon.png</file>
         <file>qml/MainTopPanel.qml</file>
         <file>qml/MainLeftColumn.qml</file>
+        <file>qml/MainRightColumn.qml</file>
     </qresource>
 </RCC>
