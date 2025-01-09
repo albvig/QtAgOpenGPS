@@ -175,27 +175,6 @@ Window {
         colorGroup: SystemPalette.Active
     }
 
-
-    Rectangle { //do we need this
-        id: background
-        objectName: "background"
-        anchors.top: topLine.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom:  parent.bottom
-
-        color: "black"
-        /*
-              Text {
-                  id: text2
-                  text: qsTr("No GPS")
-                  color: "white"
-                  font.pointSize: 24
-                  anchors.centerIn: parent
-              }
-              */
-    }
-
     MainTopPanel{
         id: topLine
         anchors.top: parent.top
