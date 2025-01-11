@@ -6,9 +6,25 @@ RadioDelegate {
     id: control
     text: model.name
     checked: model.index === trk.idx
+    anchors.left: parent.left
+    anchors.right: parent.right
+
+    Component.onCompleted: {
+        console.debug(width)
+        controlWidth = width
+    }
+
+    property double controlWidth: width
 
     contentItem: RowLayout {
-        width: 300
+        anchors.left: parent.left
+        //anchors.right: parent.right
+        //width: control.width
+
+            Component.onCompleted: {
+                console.debug(control.width)
+                console.debug(width)
+            }
 
         Image {
             id: trackType
@@ -22,17 +38,26 @@ RadioDelegate {
                                        prefix + "/images/HelpSmall.png"
         }
 
-        Text {
-            id: trackname
-            width: 250
+        Rectangle {
+            width: controlWidth - 50 - trackname.height - 200 //control.width - 50 - trackname.height
+            height: trackname.height
+            color: "transparent"
+            Text {
+                id: trackname
+                width: controlWidth - 50 - trackname.height - 100
 
-            //rightPadding: control.indicator.width + control.spacing
-            text: control.text
-            font: control.font
-            opacity: enabled ? 1.0 : 0.3
-            //color: control.down ? "red" : "blue"
-            elide: Text.ElideRight
-            verticalAlignment: Text.AlignVCenter
+                //rightPadding: control.indicator.width + control.spacing
+                text: control.text
+                font: control.font
+                opacity: enabled ? 1.0 : 0.3
+                color: control.checked ? "white" : "black"
+                elide: Text.ElideRight
+                verticalAlignment: Text.AlignVCenter
+            }
+            Component.onCompleted: {
+                console.debug(control.width)
+                console.debug(width)
+            }
         }
 
         Button {
