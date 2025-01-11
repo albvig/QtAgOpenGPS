@@ -10,7 +10,7 @@ Item {
         id: mymodel
         ListElement { index: 0; name: "AB 0"; isVisible: true; mode: 2}
         ListElement {index: 1; name: "Cu 33"; isVisible: true; mode: 4}
-        ListElement {index: 2; name: "Piv this is a very long name"; isVisible: true; mode: 4} 
+        ListElement {index: 2; name: "Piv this is a very long name"; isVisible: true; mode: 64} 
     }
     
     property var model: mymodel

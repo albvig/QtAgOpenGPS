@@ -16,6 +16,10 @@ Rectangle {
 
     property string prefix: "/home/torriem/projects/QtAgOpenGPS"
 
+    AOGTheme {
+        id: theme
+    }
+
     AOGInterface {
         id: aog
     }
@@ -42,22 +46,19 @@ Rectangle {
     }
 
 
-    Tracks.TracksListView {
+/*    Tracks.TracksListView {
         id: tracksListView
-        width: 300
+        width: 400
         height: 100
         model: trk.model
         clip: true
     }
-}
 
 
-/*
-
-Tracks.TrackList {
+*/
+    Tracks.TrackList {
         id: trackList
         visible: true
     }
 
 }
-*/
