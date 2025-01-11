@@ -169,8 +169,8 @@ MoveablePopup {
                 console.log(trk.mymodel)
             }
 
-            /*
-            ListView {
+
+            TracksListView {
                 id: trackView
                 anchors.fill: parent
                 model: trk.model
@@ -179,10 +179,8 @@ MoveablePopup {
 
                 delegate: TrackPickDelegate {
                     id: control
-
-
                 }
-            }*/
+            }
         }
     }
 }

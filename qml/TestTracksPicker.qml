@@ -46,22 +46,19 @@ Rectangle {
     }
 
 
-    Tracks.TracksListView {
+/*    Tracks.TracksListView {
         id: tracksListView
         width: 400
         height: 100
         model: trk.model
         clip: true
     }
-}
 
 
-/*
-
-Tracks.TrackList {
+*/
+    Tracks.TrackList {
         id: trackList
         visible: true
     }
 
 }
-*/
