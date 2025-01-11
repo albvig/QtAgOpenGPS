@@ -67,6 +67,13 @@ add_props = [
       'qml_name' : 'setDisplay_colorNightBorder',
       'qml_default' : "#d2d2e6"
     },
+
+    { 'ini_path': 'vehicle/vehicleName',
+      'cpp_name': 'property_setVehicle_vehicleName',
+      'cpp_default' : 'QString("Default Vehicle")',
+      'qml_name' : 'setVehicle_vehicleName',
+      'qml_default' : "Default Vehicle"
+    },
 ]
 
 def parse_settings(file):
