@@ -99,6 +99,11 @@ qt_add_executable(QtAgOpenGPS
     classes/vec3.h classes/vec3.cpp
     classes/vec4.h classes/vec4.cpp
     classes/vecfix2fix.h
+    LICENSE
+    props.py
+    TODO.txt
+    parse_properties.py
+    README.md
 )
 
 if(ANDROID)
@@ -147,13 +152,5 @@ set_target_properties(QtAgOpenGPS PROPERTIES
     MACOSX_BUNDLE ON
     QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
 )
-
-
-# TODO .pro leftovers:
-#DISTFILES += \
-#    CMakeLists.txt \
-#    TODO.txt \
-#    README.md \
-#    LICENSE
 
 add_subdirectory(QtAgIO)
