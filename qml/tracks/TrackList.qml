@@ -165,7 +165,7 @@ MoveablePopup {
             Component.onCompleted: {
                 //reloadModel()
                 console.log("model is ")
-                console.log(trk.mymodel)
+                console.log(trk.model)
             }
 
 
