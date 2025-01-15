@@ -23,7 +23,7 @@ void FormGPS::field_update_list() {
 
     int index = 0;
 
-    for (QFileInfo fieldDir : fieldsDirList) {
+    for (QFileInfo &fieldDir : fieldsDirList) {
 
         if(fieldDir.fileName() == "." ||
             fieldDir.fileName() == "..")
@@ -110,7 +110,7 @@ void FormGPS::field_new_from(QString existing, QString field_name, int flags) {
     //some how we have to write the existing patches to the disk.
     //FileSaveSections only write pending triangles
 
-    for(QSharedPointer<PatchTriangleList> l: triStrip[0].patchList) {
+    for(QSharedPointer<PatchTriangleList> &l: triStrip[0].patchList) {
         tool.patchSaveList.append(l);
     }
     FileSaveSections();
