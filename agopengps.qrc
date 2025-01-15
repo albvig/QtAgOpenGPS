@@ -663,5 +663,6 @@
         <file>qml/ManualTurnBtns.qml</file>
         <file>qml/tracks/TrackPickDelegate.qml</file>
         <file>qml/tracks/TracksListView.qml</file>
+        <file>qml/components/Spacer.qml</file>
     </qresource>
 </RCC>
