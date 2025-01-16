@@ -63,6 +63,7 @@ void FormGPS::field_open(QString field_name) {
 void FormGPS::field_new(QString field_name) {
     //assume the GUI will vet the name a little bit
     lock.lockForWrite();
+    FileSaveEverythingBeforeClosingField();
     currentFieldDirectory = field_name;
     property_setF_CurrentDir = currentFieldDirectory;
     JobNew();
