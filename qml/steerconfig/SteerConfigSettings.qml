@@ -110,8 +110,8 @@ Window{
 					cboxEncoder.checked = true;
 				}
 
-				/*nudMaxCounts.Value = (decimal)Properties.Settings.Default.setArdSteer_maxPulseCounts;
-				 hsbarSensor.Value = (int)Properties.Settings.Default.setArdSteer_maxPulseCounts;
+                nudMaxCounts.value = settings.setArdSteer_maxPulseCounts;
+                /* hsbarSensor.Value = (int)Properties.Settings.Default.setArdSteer_maxPulseCounts;
 				 lblhsbarSensor.Text = ((int)((double)hsbarSensor.Value * 0.3921568627)).ToString() + "%";*/
 
                 sett = settings.setArdSteer_setting1;
@@ -132,9 +132,9 @@ Window{
                 if (cboxEncoder.checked)
                 {
                     /* label61.Visible = true;
-                      lblPercentFS.Visible = true;
-                      nudMaxCounts.Visible = true;
-                      pbarSensor.Visible = false;
+                      lblPercentFS.Visible = true;*/
+                      nudMaxCounts.visible = true;
+                      /*pbarSensor.Visible = false;
                       hsbarSensor.Visible = false;
                       lblhsbarSensor.Visible = false;
                       label61.Text = gStr.gsEncoderCounts;*/
@@ -143,7 +143,7 @@ Window{
                 {
                     //label61.Visible = true;
                     //lblPercentFS.Visible = true;
-                    //nudMaxCounts.visible = false;
+                    nudMaxCounts.visible = false;
                     /*pbarSensor.Visible = true;
                        hsbarSensor.Visible = true;
                        lblhsbarSensor.Visible = true;
@@ -154,7 +154,7 @@ Window{
                 {
                     //label61.Visible = true;
                     //lblPercentFS.Visible = true;
-                    //nudMaxCounts.visible = false;
+                    nudMaxCounts.visible = false;
                     /* pbarSensor.Visible = true;
                         hsbarSensor.Visible = true;
                         lblhsbarSensor.Visible = true;
@@ -166,7 +166,7 @@ Window{
                     //console.log("nothing checked--what's going on here?")
                     /*label61.Visible = false;
                          lblPercentFS.Visible = false;*/
-                    //nudMaxCounts.Visible = false;
+                    nudMaxCounts.Visible = false;
                     /*pbarSensor.Visible = false;
                           hsbarSensor.Visible = false;
                           lblhsbarSensor.Visible = false;*/
@@ -246,7 +246,7 @@ Window{
             }
             else
             {
-                //settings.setArdSteer_maxPulseCounts = nudMaxCounts.Value; //todo add
+                settings.setArdSteer_maxPulseCounts = nudMaxCounts.value;
             }
 
             // Settings1
@@ -303,11 +303,11 @@ Window{
             id: sensorWindowItem
             anchors.fill: parent
             ButtonGroup{
-                buttons: sensorsWindow.children
+                buttons: sensorsBtnsRow.children
             }
 
             RowLayout{
-                id: sensorsWindow
+                id: sensorsBtnsRow
                 width: parent.width
                 IconButtonColor{
                     id: cboxEncoder
@@ -332,6 +332,24 @@ Window{
                     buttonText: "Current Turn Sensor"
                     Layout.alignment: Qt.AlignCenter
                     onClicked: unsaved.visible = true
+                }
+            }
+            Column {
+                anchors.top: sensorsBtnsRow.bottom
+                anchors.topMargin: 30 * theme.scaleHeight
+                anchors.horizontalCenter: sensorsBtnsRow.horizontalCenter
+                spacing: 5 * theme.scaleHeight
+                SpinBoxCustomized {
+                    id: nudMaxCounts
+                    text: qsTr("Counts")
+                    implicitWidth: 100 * theme.scaleWidth
+                    implicitHeight: 65 * theme.scaleHeight
+                    from: 0
+                    value: 0
+                    to: 255
+                    decimals: 0
+                    editable: true
+                    onValueChanged: unsaved.visible = true
                 }
             }
         }
@@ -461,6 +479,7 @@ Window{
             visible: settingsBtn.checked
             anchors.centerIn: parent
             SpinBoxCustomized{
+                //todo I don't think this is supposed to get sent to the module
                 text: "Panic Stop"
                 implicitWidth: 100 * theme.scaleWidth
                 implicitHeight: 65 * theme.scaleHeight
