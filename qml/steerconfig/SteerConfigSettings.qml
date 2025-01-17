@@ -166,7 +166,7 @@ Window{
                     //console.log("nothing checked--what's going on here?")
                     /*label61.Visible = false;
                          lblPercentFS.Visible = false;*/
-                    nudMaxCounts.Visible = false;
+                    nudMaxCounts.visible = false;
                     /*pbarSensor.Visible = false;
                           hsbarSensor.Visible = false;
                           lblhsbarSensor.Visible = false;*/
@@ -316,6 +316,7 @@ Window{
                     buttonText: "Count Sensor"
                     Layout.alignment: Qt.AlignCenter
                     onClicked: unsaved.visible = true
+                    onCheckedChanged: nudMaxCounts.visible = checked
                 }
                 IconButtonColor{
                     id: cboxPressureSensor
