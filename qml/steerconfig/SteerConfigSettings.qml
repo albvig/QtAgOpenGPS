@@ -485,6 +485,44 @@ Window{
             id: settingsWindow
             visible: settingsBtn.checked
             anchors.centerIn: parent
+            Column {
+                anchors.top: parent.top
+                anchors.topMargin: 30 * theme.scaleHeight
+                anchors.horizontalCenter: sensorsBtnsRow.horizontalCenter
+                anchors.bottom: parent.bottom
+                spacing: 10 * theme.scaleHeight
+                width: childrenRect.width
+                SliderCustomized{
+                    //Uturn Compensation
+                    width: 250 * theme.scalewidth
+                    centerTopText: qsTr("UTurn Compensation")
+                    from: 2
+                    to: 20
+                    value: settings.setAS_uTurnCompensation * 10
+                    onValueChanged: settings.setAS_uTurnCompensation = (value / 10)
+                    leftText: value - 10
+                }
+                SliderCustomized {
+                    //Sidehill deg
+                    width: 250 * theme.scalewidth
+                    centerTopText: qsTr("Sidehill Deg Turn per Deg of Roll")
+                    from: 0.00
+                    to:1.00
+                    stepSize: .01
+                    value: settings.setAS_sideHillComp
+                    onValueChanged: settings.setAS_sideHillComp = value
+                }
+                Row{
+                    IconButtonColor{
+                        text: qsTr("Stanley/Pure")
+                        checked: settings.setMenu_isPureOn
+                        onCheckedChanged: settings.setMenu_isPureOn = isChecked
+                        colorChecked: "white"
+                        icon.source: prefix + "/images/ModeStanley.png"
+                        iconChecked: prefix + "/images/ModePurePursuit.png"
+                    }
+                }
+            }
         }
         //endregion settingsTab
         //region steerSettingsTab
