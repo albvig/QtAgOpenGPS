@@ -485,18 +485,6 @@ Window{
             id: settingsWindow
             visible: settingsBtn.checked
             anchors.centerIn: parent
-            SpinBoxCustomized{
-                //todo I don't think this is supposed to get sent to the module
-                text: "Panic Stop"
-                implicitWidth: 100 * theme.scaleWidth
-                implicitHeight: 65 * theme.scaleHeight
-                from: 0
-                value: 0
-                to: 10
-                decimals: 1
-                editable: true
-                onValueChanged: unsaved.visible = true
-            }
         }
         //endregion settingsTab
         //region steerSettingsTab
