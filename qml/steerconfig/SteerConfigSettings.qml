@@ -76,7 +76,7 @@ Window{
 
 		function load_settings(){ 
 			if (visible) {
-				var sett = settings.setArdSteer_setting1
+                var sett = settings.setArdSteer_setting0
 
 				if ((sett & 1) == 0) chkInvertWAS.checked = false;
 				else chkInvertWAS.checked = true;
