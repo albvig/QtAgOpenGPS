@@ -133,38 +133,31 @@ Window{
 
                 if (cboxEncoder.checked)
                 {
-                    /* label61.Visible = true;
-                      lblPercentFS.Visible = true;*/
+                      //lblPercentFS.Visible = true;*/
                       /*pbarSensor.Visible = false;
                       hsbarSensor.Visible = false;
                       lblhsbarSensor.Visible = false;
-                      label61.Text = gStr.gsEncoderCounts;*/
                 }
                 else if (cboxPressureSensor.checked)
                 {
-                    //label61.Visible = true;
                     //lblPercentFS.Visible = true;
                     /*pbarSensor.Visible = true;
                        hsbarSensor.Visible = true;
                        lblhsbarSensor.Visible = true;
-
-                       label61.Text = "Off at %";*/
+*/
                 }
                 else if (cboxCurrentSensor.checked)
                 {
-                    //label61.Visible = true;
                     //lblPercentFS.Visible = true;
                     /* pbarSensor.Visible = true;
                         hsbarSensor.Visible = true;
                         lblhsbarSensor.Visible = true;
-
-                        label61.Text = "Off at %";*/
+*/
                 }
                 else
                 {
                     //console.log("nothing checked--what's going on here?")
-                    /*label61.Visible = false;
-                         lblPercentFS.Visible = false;*/
+                         /*lblPercentFS.Visible = false;*/
                     /*pbarSensor.Visible = false;
                           hsbarSensor.Visible = false;
                           lblhsbarSensor.Visible = false;*/
@@ -333,12 +326,28 @@ Window{
                     onClicked: unsaved.visible = true
                 }
             }
+            Text{
+                //id: label61
+                anchors.top: sensorsDisplayColumn.top
+                anchors.right: sensorsDisplayColumn.left
+                anchors.rightMargin: 10
+                text: qsTr("Off at %")
+                font.bold: true
+                visible: cboxPressureSensor.checked || cboxCurrentSensor.checked
+            }
+
             Column {
+                id: sensorsDisplayColumn
                 anchors.top: sensorsBtnsRow.bottom
                 anchors.topMargin: 30 * theme.scaleHeight
                 anchors.horizontalCenter: sensorsBtnsRow.horizontalCenter
                 anchors.bottom: parent.bottom
                 spacing: 5 * theme.scaleHeight
+                width: childrenRect.width
+                //lblPercentFs is the percent on the progress bar
+                //pbarSensor is the progress bar
+                /* hsbarSensor.Value = (int)Properties.Settings.Default.setArdSteer_maxPulseCounts;
+                 lblhsbarSensor.Text = ((int)((double)hsbarSensor.Value * 0.3921568627)).ToString() + "%";*/
                 SpinBoxCustomized {
                     id: nudMaxCounts
                     text: qsTr("Counts")
