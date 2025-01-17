@@ -133,33 +133,24 @@ Window{
 
                 if (cboxEncoder.checked)
                 {
-                      //lblPercentFS.Visible = true;*/
-                      /*pbarSensor.Visible = false;
-                      hsbarSensor.Visible = false;
+                      /*hsbarSensor.Visible = false;
                       lblhsbarSensor.Visible = false;
                 }
                 else if (cboxPressureSensor.checked)
                 {
-                    //lblPercentFS.Visible = true;
-                    /*pbarSensor.Visible = true;
-                       hsbarSensor.Visible = true;
+                       /*hsbarSensor.Visible = true;
                        lblhsbarSensor.Visible = true;
 */
                 }
                 else if (cboxCurrentSensor.checked)
                 {
-                    //lblPercentFS.Visible = true;
-                    /* pbarSensor.Visible = true;
-                        hsbarSensor.Visible = true;
+                        /*hsbarSensor.Visible = true;
                         lblhsbarSensor.Visible = true;
 */
                 }
                 else
                 {
-                    //console.log("nothing checked--what's going on here?")
-                         /*lblPercentFS.Visible = false;*/
-                    /*pbarSensor.Visible = false;
-                          hsbarSensor.Visible = false;
+                          /*hsbarSensor.Visible = false;
                           lblhsbarSensor.Visible = false;*/
                 }
 
@@ -344,8 +335,6 @@ Window{
                 anchors.bottom: parent.bottom
                 spacing: 5 * theme.scaleHeight
                 width: childrenRect.width
-                //lblPercentFs is the percent on the progress bar
-                //pbarSensor is the progress bar
                 /* hsbarSensor.Value = (int)Properties.Settings.Default.setArdSteer_maxPulseCounts;
                  lblhsbarSensor.Text = ((int)((double)hsbarSensor.Value * 0.3921568627)).ToString() + "%";*/
                 SpinBoxCustomized {
@@ -369,7 +358,7 @@ Window{
                     visible: cboxPressureSensor.checked || cboxCurrentSensor.checked || cboxEncoder.checked
                     value: aog.sensorData
                     Text {
-                        //id: blbPercentFS
+                        //id: lblPercentFS
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.right
                         anchors.leftMargin: 5
