@@ -133,7 +133,6 @@ Window{
                 {
                     /* label61.Visible = true;
                       lblPercentFS.Visible = true;*/
-                      nudMaxCounts.visible = true;
                       /*pbarSensor.Visible = false;
                       hsbarSensor.Visible = false;
                       lblhsbarSensor.Visible = false;
@@ -143,7 +142,6 @@ Window{
                 {
                     //label61.Visible = true;
                     //lblPercentFS.Visible = true;
-                    nudMaxCounts.visible = false;
                     /*pbarSensor.Visible = true;
                        hsbarSensor.Visible = true;
                        lblhsbarSensor.Visible = true;
@@ -154,7 +152,6 @@ Window{
                 {
                     //label61.Visible = true;
                     //lblPercentFS.Visible = true;
-                    nudMaxCounts.visible = false;
                     /* pbarSensor.Visible = true;
                         hsbarSensor.Visible = true;
                         lblhsbarSensor.Visible = true;
@@ -166,7 +163,6 @@ Window{
                     //console.log("nothing checked--what's going on here?")
                     /*label61.Visible = false;
                          lblPercentFS.Visible = false;*/
-                    nudMaxCounts.visible = false;
                     /*pbarSensor.Visible = false;
                           hsbarSensor.Visible = false;
                           lblhsbarSensor.Visible = false;*/
@@ -347,6 +343,7 @@ Window{
                     implicitHeight: 65 * theme.scaleHeight
                     from: 0
                     value: 0
+                    visible: false
                     to: 255
                     decimals: 0
                     editable: true
