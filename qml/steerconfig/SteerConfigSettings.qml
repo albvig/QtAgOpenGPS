@@ -515,8 +515,9 @@ Window{
                 Row{
                     IconButtonColor{
                         text: qsTr("Stanley/Pure")
-                        checked: settings.setMenu_isPureOn
-                        onCheckedChanged: settings.setMenu_isPureOn = isChecked
+                        isChecked: settings.setMenu_isPureOn
+                        checkable: true
+                        onCheckedChanged: console.log(settings.setMenu_isPureOn)
                         colorChecked: "white"
                         icon.source: prefix + "/images/ModeStanley.png"
                         iconChecked: prefix + "/images/ModePurePursuit.png"
