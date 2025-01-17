@@ -355,7 +355,7 @@ Window{
                     //just mirror width/height
                     width: 250 * theme.scaleWidth
                     height: 50 * theme.scaleWidth
-                    visible: cboxPressureSensor.checked || cboxCurrentSensor.checked || cboxEncoder.checked
+                    visible: cboxPressureSensor.checked || cboxCurrentSensor.checked
                     value: aog.sensorData
                     Text {
                         //id: lblPercentFS
