@@ -119,6 +119,8 @@ Window{
                 if ((sett & 1) == 0) cboxDanfoss.checked = false;
                 else cboxDanfoss.checked = true;
 
+                //if ((sett & 8) == 0) cboxXY.Text = "X";
+                //else cboxXY.Text = "Y";
                 if ((sett & 8) == 0) cboxXY.currentIndex = 0;
                 else cboxXY.currentIndex = 1;
 
@@ -351,12 +353,13 @@ Window{
                     onValueChanged: unsaved.visible = true
                 }
                 ProgressBar {
-                    id: hsBarSensor
-                    //just mirrir width/height
+                    //id: pbarSensor
+                    //just mirror width/height
                     width: 250 * theme.scaleWidth
                     height: 50 * theme.scaleWidth
                     visible: cboxPressureSensor.checked || cboxCurrentSensor.checked || cboxEncoder.checked
                     Text {
+                        //id: blbPercentFS
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.right
                         anchors.leftMargin: 5
