@@ -335,6 +335,7 @@ Window{
                 anchors.top: sensorsBtnsRow.bottom
                 anchors.topMargin: 30 * theme.scaleHeight
                 anchors.horizontalCenter: sensorsBtnsRow.horizontalCenter
+                anchors.bottom: parent.bottom
                 spacing: 5 * theme.scaleHeight
                 SpinBoxCustomized {
                     id: nudMaxCounts
@@ -348,6 +349,20 @@ Window{
                     decimals: 0
                     editable: true
                     onValueChanged: unsaved.visible = true
+                }
+                ProgressBar {
+                    id: hsBarSensor
+                    //just mirrir width/height
+                    width: 250 * theme.scaleWidth
+                    height: 50 * theme.scaleWidth
+                    visible: cboxPressureSensor.checked || cboxCurrentSensor.checked || cboxEncoder.checked
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.right
+                        anchors.leftMargin: 5
+                        text: "0 %"
+                        font.bold: true
+                    }
                 }
             }
         }
