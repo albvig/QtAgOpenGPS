@@ -472,8 +472,7 @@ Window{
                     Text{
                         anchors.top: cboxSteerEnable.bottom
                         anchors.left: cboxSteerEnable.left
-                        text: qsTr("Button- Push On, Push Off
-							   Switch- Pushed On, Release Off")
+                        text: qsTr("Button- Push On, Push Off\nSwitch- Pushed On, Release Off")
                         font.pixelSize: 10
                     }
                 }
