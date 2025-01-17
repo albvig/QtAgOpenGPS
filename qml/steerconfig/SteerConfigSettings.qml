@@ -367,12 +367,13 @@ Window{
                     width: 250 * theme.scaleWidth
                     height: 50 * theme.scaleWidth
                     visible: cboxPressureSensor.checked || cboxCurrentSensor.checked || cboxEncoder.checked
+                    value: aog.sensorData
                     Text {
                         //id: blbPercentFS
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.right
                         anchors.leftMargin: 5
-                        text: "0 %"
+                        text: (aog.sensorData < 0 ? "0" : aog.sensorData) + " %"
                         font.bold: true
                     }
                 }
