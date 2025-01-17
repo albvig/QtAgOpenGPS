@@ -111,8 +111,7 @@ Window{
 				}
 
                 nudMaxCounts.value = settings.setArdSteer_maxPulseCounts;
-                /* hsbarSensor.Value = (int)Properties.Settings.Default.setArdSteer_maxPulseCounts;
-				 lblhsbarSensor.Text = ((int)((double)hsbarSensor.Value * 0.3921568627)).ToString() + "%";*/
+                hsbarSensor.Value = settings.setArdSteer_maxPulseCounts;
 
                 sett = settings.setArdSteer_setting1;
 
@@ -130,30 +129,9 @@ Window{
                 if ((sett & 4) == 0) cboxCurrentSensor.checked = false;
                 else cboxCurrentSensor.checked = true;
 
-
-                if (cboxEncoder.checked)
-                {
-                      /*hsbarSensor.Visible = false;
-                      lblhsbarSensor.Visible = false;
-                }
-                else if (cboxPressureSensor.checked)
-                {
-                       /*hsbarSensor.Visible = true;
-                       lblhsbarSensor.Visible = true;
-*/
-                }
-                else if (cboxCurrentSensor.checked)
-                {
-                        /*hsbarSensor.Visible = true;
-                        lblhsbarSensor.Visible = true;
-*/
-                }
-                else
-                {
-                          /*hsbarSensor.Visible = false;
-                          lblhsbarSensor.Visible = false;*/
-                }
-
+                /*the display logic that went here has been moved to the individual
+                 *component files. They are not needed in QML
+                */
             }
         }
 
@@ -224,7 +202,7 @@ Window{
 
             if (cboxCurrentSensor.checked || cboxPressureSensor.checked)
             {
-                //settings.setArdSteer_maxPulseCounts = hsbarSensor.Value; //todo add
+                settings.setArdSteer_maxPulseCounts = hsbarSensor.value;
             }
             else
             {
@@ -335,8 +313,6 @@ Window{
                 anchors.bottom: parent.bottom
                 spacing: 5 * theme.scaleHeight
                 width: childrenRect.width
-                /* hsbarSensor.Value = (int)Properties.Settings.Default.setArdSteer_maxPulseCounts;
-                 lblhsbarSensor.Text = ((int)((double)hsbarSensor.Value * 0.3921568627)).ToString() + "%";*/
                 SpinBoxCustomized {
                     id: nudMaxCounts
                     text: qsTr("Counts")
@@ -363,6 +339,23 @@ Window{
                         anchors.left: parent.right
                         anchors.leftMargin: 5
                         text: (aog.sensorData < 0 ? "0" : aog.sensorData) + " %"
+                        font.bold: true
+                    }
+                }
+                SliderCustomized{
+                    id: hsbarSensor
+                    from: 0
+                    to: 255
+                    stepSize: 1
+                    width: 250 * theme.scaleWidth
+                    height: 50 * theme.scaleWidth
+                    visible: cboxPressureSensor.checked || cboxCurrentSensor.checked
+                    Text {
+                        //id: lblhsbarSensor
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.right
+                        anchors.leftMargin: 5
+                        text: (hsbarSensor.value * 0.3921568627)  + " %"
                         font.bold: true
                     }
                 }
