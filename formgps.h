@@ -97,6 +97,12 @@ public:
     QOffscreenSurface backSurface;
     QOpenGLFramebufferObject *backFBO = 0;
 
+    QSurfaceFormat zoomSurfaceFormat;
+    QOpenGLContext zoomOpenGLContext;
+    QOffscreenSurface zoomSurface;
+    QOpenGLFramebufferObject *zoomFBO = 0;
+
+
     /*******************
      * from FormGPS.cs *
      *******************/
@@ -545,6 +551,7 @@ public:
     //data buffer for pixels read from off screen buffer
     //uchar grnPixels[80001];
     LookAheadPixels grnPixels[150001];
+    LookAheadPixels overPixels[160000]; //400x400
     QImage grnPix;
 
     /*
@@ -639,6 +646,7 @@ public slots:
      *******************/
     void tmrWatchdog_timeout();
     void processSectionLookahead(); //called when section lookahead GL stuff is rendered
+    void processOverlapCount(); //called to calculate overlap stats
 
     void TimedMessageBox(int timeout, QString s1, QString s2);
 
@@ -787,6 +795,8 @@ public slots:
 
     void oglBack_Paint();
     void openGLControlBack_Initialized();
+
+    void oglZoom_Paint();
 
     /***
      * UDPCOMM.Designer.cs
