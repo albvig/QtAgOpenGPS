@@ -83,11 +83,22 @@ MoveablePopup {
                     implicitHeight: 50 * theme.scaleHeight
                     implicitWidth: parent.width /4 - 4
                 }
-			}
+            }
+
+            WasBar{
+                id: wasbar
+                wasvalue: aog.steerAngleActual*10
+                width: 380 * theme.scaleWidth
+                visible: steerBtn.checked
+                anchors.top: buttonsTop.bottom
+                anchors.bottomMargin: 8 * theme.scaleHeight
+                anchors.topMargin: 8 * theme.scaleHeight
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
 
             Item{
                 id: slidersArea
-                anchors.top: buttonsTop.bottom
+                anchors.top: wasbar.bottom
                 anchors.right: parent.right
                 anchors.left: parent.left
                 anchors.bottom: angleInfo.top
@@ -97,7 +108,7 @@ MoveablePopup {
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 5 * theme.scaleHeight
                     anchors.left: parent.left
-                    anchors.leftMargin: 20 * theme.scaleWidth
+                    anchors.leftMargin: 50 * theme.scaleWidth
                     anchors.top: parent.top
                     anchors.topMargin: 5 * theme.scaleHeight
                     width: parent.width *.5
@@ -107,12 +118,7 @@ MoveablePopup {
                       4 ColumnLayouts*/
                      //region WAStab
 
-                    WasBar{
-                        id: wasbar
-                        wasvalue: aog.steerAngleActual*10
-                        width: 360 * theme.scaleWidth
-                        visible: steerBtn.checked
-                    }
+
 
 
                     IconButtonTransparent { //was zero button

@@ -721,6 +721,7 @@ void FormGPS::modules_send_252() {
     p_252.pgn[p_252.gainProportional] = (int)property_setAS_Kp;
     p_252.pgn[p_252.highPWM] = (int)property_setAS_highSteerPWM;
     p_252.pgn[p_252.lowPWM] = (int)property_setAS_lowSteerPWM;
+    p_252.pgn[p_252.minPWM] = property_setAS_minSteerPWM;
     p_252.pgn[p_252.countsPerDegree] = (int)property_setAS_countsPerDegree;
     p_252.pgn[p_252.wasOffsetHi] = (char)((int)property_setAS_wasOffset >> 8);
     p_252.pgn[p_252.wasOffsetLo] = (char)property_setAS_wasOffset;
