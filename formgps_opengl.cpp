@@ -894,6 +894,7 @@ void FormGPS::oglZoom_Paint()
     {
         gl->glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         projection.setToIdentity(); //Reset the view
+        projection.perspective(glm::toDegrees((double)1.0f), 1.0f, 100.0f, 5000.0f);
         modelview.setToIdentity();
 
         calculateMinMax();
@@ -952,7 +953,7 @@ void FormGPS::oglZoom_Paint()
 
         //oglZoom.SwapBuffers();
 
-        QImage overPix;
+        //QImage overPix;
         overPix = zoomFBO->toImage().mirrored().convertToFormat(QImage::Format_RGBX8888);
         memcpy(overPixels, overPix.constBits(), overPix.size().width() * overPix.size().height() * 4);
     }

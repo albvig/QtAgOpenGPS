@@ -176,7 +176,8 @@ void FormGPS::processSectionLookahead() {
     //qDebug() << "frame time after getting lock  " << swFrame.elapsed();
 
     if (property_displayShowBack)
-        grnPixelsWindow->setPixmap(QPixmap::fromImage(grnPix.mirrored()));
+        //grnPixelsWindow->setPixmap(QPixmap::fromImage(grnPix.mirrored()));
+        grnPixelsWindow->setPixmap(QPixmap::fromImage(overPix.mirrored()));
 
     //determine where the tool is wrt to headland
     if (bnd.isHeadlandOn) bnd.WhereAreToolCorners(tool);
