@@ -664,5 +664,6 @@
         <file>qml/tracks/TrackPickDelegate.qml</file>
         <file>qml/tracks/TracksListView.qml</file>
         <file>qml/components/Spacer.qml</file>
+        <file>qml/steerconfig/WasBar.qml</file>
     </qresource>
 </RCC>

@@ -704,6 +704,7 @@ public slots:
     //modules ui callback
     void modules_send_238();
 	void modules_send_251();
+    void modules_send_252();
 
     //boundary UI for recording new boundary
     void boundary_calculate_area();

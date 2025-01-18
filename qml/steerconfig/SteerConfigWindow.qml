@@ -19,7 +19,7 @@ MoveablePopup {
     x: settings.setWindow_steerSettingsLocation.x
     y: settings.setWindow_steerSettingsLocation.y
     function show (){
-		steerConfigWindow.visible = true
+        steerConfigWindow.visible = true
 	}
 
 	Rectangle{
@@ -105,15 +105,23 @@ MoveablePopup {
                     /* Here, we just set which Sliders we want to see, and the
                       ColumnLayout takes care of the rest. No need for
                       4 ColumnLayouts*/
+                     //region WAStab
 
-                    //region WAStab
+                    WasBar{
+                        id: wasbar
+                        wasvalue: aog.steerAngleActual*10
+                        width: 360 * theme.scaleWidth
+                        visible: steerBtn.checked
+                    }
+
+
                     IconButtonTransparent { //was zero button
                         width: height*2
                         Layout.alignment: Qt.AlignCenter
                         icon.source: prefix + "/images/SteerCenter.png"
                         implicitHeight: parent.height /5 -20
-                        visible: false
-                        //visible: steerBtn.checked
+                        //visible: false
+                        visible: steerBtn.checked
                     }
 
                     SteerConfigSliderCustomized {
@@ -123,7 +131,7 @@ MoveablePopup {
                         width: 200 * theme.scaleWidth
                         from: -4000
                         leftText: utils.decimalRound(value / cpDegSlider.value, 2)
-                        onValueChanged: settings.setAS_wasOffset = value * cpDegSlider.value
+                        onValueChanged: settings.setAS_wasOffset = value * cpDegSlider.value, aog.modules_send_252()
                         to: 4000
                         value: settings.setAS_wasOffset / cpDegSlider.value
                         visible: steerBtn.checked
@@ -133,7 +141,7 @@ MoveablePopup {
                         centerTopText: "Counts per Degree"
                         from: 1
                         leftText: value
-                        onValueChanged: settings.setAS_countsPerDegree = value
+                        onValueChanged: settings.setAS_countsPerDegree = value, aog.modules_send_252()
                         stepSize: 1
                         to: 255
                         value: Math.round(settings.setAS_countsPerDegree, 0)
@@ -145,7 +153,7 @@ MoveablePopup {
                         centerTopText: "AckerMann"
                         from: 1
                         leftText: value
-                        onValueChanged: settings.setAS_ackerman = value
+                        onValueChanged: settings.setAS_ackerman = value, aog.modules_send_252()
                         stepSize: 1
                         to: 200
                         value: Math.round(settings.setAS_ackerman, 0)
@@ -171,7 +179,7 @@ MoveablePopup {
                         centerTopText: "Proportional Gain"
                         from: 0
                         leftText: value
-                        onValueChanged: settings.setAS_Kp = value
+                        onValueChanged: settings.setAS_Kp = value, aog.modules_send_252()
                         stepSize: 1
                         to: 200
                         value: Math.round(settings.setAS_Kp, 0)
@@ -182,7 +190,7 @@ MoveablePopup {
                         centerTopText: "Maximum Limit"
                         from: 0
                         leftText: value
-                        onValueChanged: settings.setAS_highSteerPWM = value
+                        onValueChanged: settings.setAS_highSteerPWM = value, aog.modules_send_252()
                         stepSize: 1
                         to: 254
                         value: Math.round(settings.setAS_highSteerPWM, 0)
@@ -193,7 +201,7 @@ MoveablePopup {
                         centerTopText: "Minimum to Move"
                         from: 0
                         leftText: value
-                        onValueChanged: settings.setAS_minSteerPWM = value
+                        onValueChanged: settings.setAS_minSteerPWM = value, aog.modules_send_252()
                         stepSize: 1
                         to: 100
                         value: Math.round(settings.setAS_minSteerPWM, 0)
@@ -207,7 +215,7 @@ MoveablePopup {
                         id: stanleyAggressivenessSlider
                         centerTopText: "Agressiveness"
                         from: .1
-                        onValueChanged: settings.stanleyDistanceErrorGain = value
+                        onValueChanged: settings.stanleyDistanceErrorGain = value, aog.modules_send_252()
                         stepSize: .1
                         to: 4
                         leftText: Math.round(value * 100)/100
@@ -218,7 +226,7 @@ MoveablePopup {
                         id: overShootReductionSlider
                         centerTopText: "OverShoot Reduction"
                         from: .1
-                        onValueChanged: settings.stanleyHeadingErrorGain = value
+                        onValueChanged: settings.stanleyHeadingErrorGain = value, aog.modules_send_252()
                         stepSize: .1
                         to: 1.5
                         leftText: Math.round(value * 100) / 100
@@ -230,7 +238,7 @@ MoveablePopup {
                         centerTopText: "Integral"
                         from: 0
                         leftText: value
-                        onValueChanged: settings.stanleyIntegralGainAB = value /100
+                        onValueChanged: settings.stanleyIntegralGainAB = value /100, aog.modules_send_252()
                         stepSize: 1
                         to: 100
                         value: Math.round(settings.stanleyIntegralGainAB * 100, 0)
@@ -244,7 +252,7 @@ MoveablePopup {
                         id: acqLookAheadSlider
                         centerTopText: "Acquire Look Ahead"
                         from: 1
-                        onValueChanged: settings.setVehicle_goalPointLookAhead = value
+                        onValueChanged: settings.setVehicle_goalPointLookAhead = value, aog.modules_send_252()
                         stepSize: .1
                         leftText: Math.round(value * 100) / 100
                         to: 7
@@ -266,7 +274,7 @@ MoveablePopup {
                         id: lookAheadSpeedGainSlider
                         centerTopText: "Look Ahead Speed Gain"
                         from: .5
-                        onValueChanged: settings.setVehicle_goalPointLookAheadMult = value
+                        onValueChanged: settings.setVehicle_goalPointLookAheadMult = value, aog.modules_send_252()
                         stepSize: .1
                         to: 3
                         leftText: Math.round(value * 100) / 100
@@ -277,7 +285,7 @@ MoveablePopup {
                         id: ppIntegralSlider
                         centerTopText: "Integral"
                         from: 0
-                        onValueChanged: settings.purePursuitIntegralGainAB = value /100
+                        onValueChanged: settings.purePursuitIntegralGainAB = value /100, aog.modules_send_252()
                         stepSize: 1
                         to: 100
                         leftText: Math.round(value *100) / 100
@@ -320,11 +328,11 @@ MoveablePopup {
                         Layout.alignment: Qt.AlignCenter
                     }
                     Text {
-                        text: qsTr("Act: " + aog.steerAngleActualRounded)
+                        text: qsTr("Act: " + Math.round(aog.steerAngleActual, 1))
                         Layout.alignment: Qt.AlignCenter
                     }
                     Text {
-                        property double err: aog.steerAngleActualRounded - aog.steerAngleSetRounded
+                        property double err: Math.round(aog.steerAngleActual, 1) - aog.steerAngleSetRounded
                         id: errorlbl
                         Layout.alignment: Qt.AlignCenter
                         onErrChanged: err > 0 ? errorlbl.color = "red" : errorlbl.color = "darkgreen"
