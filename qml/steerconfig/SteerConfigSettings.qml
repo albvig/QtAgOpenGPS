@@ -112,7 +112,7 @@ Window{
 				}
 
                 nudMaxCounts.value = settings.setArdSteer_maxPulseCounts;
-                hsbarSensor.Value = settings.setArdSteer_maxPulseCounts;
+                hsbarSensor.value = settings.setArdSteer_maxPulseCounts;
 
                 sett = settings.setArdSteer_setting1;
 
