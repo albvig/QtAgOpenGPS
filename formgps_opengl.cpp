@@ -457,7 +457,7 @@ void FormGPS::oglMain_Paint()
 
             //uturn buttons drawn in QML
 
-            if (tool.isDisplayTramControl && tram.displayMode != 0) { DrawTramMarkers(gl,projection*modelview); }
+            //tram markers drawn in QML
 
             //if this is on, vehicleInterface.isHydLiftOn is true
             if (p_239.pgn[p_239.hydLift] == 2)
@@ -991,54 +991,6 @@ void FormGPS::MakeFlagMark(QOpenGLFunctions *gl)
 
     /*TODO: popup flag menu*/
     //have to set a flag for the main loop
-
-}
-
-void FormGPS::DrawTramMarkers(QOpenGLFunctions *gl, QMatrix4x4 mvp)
-{
-    //int sizer = 60;
-    int center = -50 ;
-    int bottomSide = 100;
-
-    GLHelperTexture gltex;
-
-    QColor dot_color;
-
-    if (((tram.controlByte) & 2) == 2) dot_color = QColor::fromRgbF(0.29f, 0.990f, 0.290f, 0.983f);
-    else dot_color = QColor::fromRgbF(0.9f, 0.0f, 0.0f, 0.53f);
-
-    if ((bool)tram.isLeftManualOn)
-    {
-        if (isFlashOnOff) dot_color = QColor::fromRgbF(0.0f, 0.0f, 0.0f, 0.993f);
-        else dot_color = QColor::fromRgbF(0.99f, 0.990f, 0.0f, 0.993f);
-    }
-
-    gltex.append( { QVector3D(center - 32, bottomSide - 32, 0), QVector2D(0,0) } );
-    gltex.append( { QVector3D(center + 32, bottomSide - 32, 0), QVector2D(1, 0) } );
-    gltex.append( { QVector3D(center + 32, bottomSide + 32, 0), QVector2D(1, 1) } );
-    gltex.append( { QVector3D(center - 32, bottomSide + 32, 0), QVector2D(0, 1) });
-
-    gltex.draw(gl,mvp,Textures::TRAMDOT,GL_QUADS,true,dot_color);
-
-    if (((tram.controlByte) & 1) == 1) dot_color = QColor::fromRgbF(0.29f, 0.990f, 0.290f, 0.983f);
-    else dot_color = QColor::fromRgbF(0.9f, 0.0f, 0.0f, 0.53f);
-
-    if ((bool)tram.isRightManualOn)
-    {
-        if (isFlashOnOff) dot_color = QColor::fromRgbF(0.0f, 0.0f, 0.0f, 0.993f);
-        else dot_color = QColor::fromRgbF(0.99f, 0.990f, 0.0f, 0.993f);
-    }
-
-    center += 100;
-
-    gltex.clear();
-
-    gltex.append( { QVector3D(center - 32, bottomSide - 32, 0), QVector2D(0, 0) } );
-    gltex.append( { QVector3D(center + 32, bottomSide - 32, 0), QVector2D(1, 0) } );
-    gltex.append( { QVector3D(center + 32, bottomSide + 32, 0), QVector2D(1, 1) } );
-    gltex.append( { QVector3D(center - 32, bottomSide + 32, 0), QVector2D(0, 1) } );
-
-    gltex.draw(gl,mvp,Textures::TRAMDOT,GL_QUADS,true,dot_color);
 
 }
 
