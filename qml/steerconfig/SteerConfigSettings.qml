@@ -5,6 +5,7 @@
 import QtQuick
 import QtQuick.Controls.Fusion
 import QtQuick.Layouts
+import QtQuick.Dialogs
 
 import ".."
 import "../components"
@@ -111,7 +112,7 @@ Window{
 				}
 
                 nudMaxCounts.value = settings.setArdSteer_maxPulseCounts;
-                hsbarSensor.Value = settings.setArdSteer_maxPulseCounts;
+                hsbarSensor.value = settings.setArdSteer_maxPulseCounts;
 
                 sett = settings.setArdSteer_setting1;
 
@@ -257,6 +258,78 @@ Window{
 
             unsaved.visible = false;
         }
+        function reset_all() {
+            timedMessage.addMessage(2000, "Reset To Default", "Values Set to Inital Default");
+            //settings.setVehicle_maxSteerAngle = mf.vehicle.maxSteerAngle = 45; TODO
+            settings.setVehicle_maxSteerAngle = 45;
+            settings.setAS_countsPerDegree = 110;
+
+            settings.setAS_ackerman = 100;
+
+            settings.setAS_wasOffset = 3;
+
+            settings.setAS_highSteerPWM = 180;
+            settings.setAS_Kp = 50;
+            settings.setAS_minSteerPWM = 25;
+
+            settings.setArdSteer_setting0 = 56;
+            settings.setArdSteer_setting1 = 0;
+            settings.setArdMac_isDanfoss = false;
+
+            settings.setArdSteer_maxPulseCounts = 3;
+
+            settings.setVehicle_goalPointAcquireFactor = 0.85;
+            settings.setVehicle_goalPointLookAheadHold = 3;
+            settings.setVehicle_goalPointLookAheadMult = 1.5;
+
+            settings.stanleyHeadingErrorGain = 1;
+            settings.stanleyDistanceErrorGain = 1;
+            settings.stanleyIntegralGainAB = 0;
+
+            settings.purePursuitIntegralGainAB = 0;
+
+            settings.setAS_sideHillComp = 0;
+
+            settings.setAS_uTurnCompensation = 1;
+
+            settings.setIMU_invertRoll = false;
+
+            settings.setIMU_rollZero = 0;
+
+            settings.setAS_minSteerSpeed = 0;
+            settings.setAS_maxSteerSpeed = 15;
+            settings.setAS_functionSpeedLimit = 12;
+            settings.setDisplay_lightbarCmPerPixel = 5;
+            settings.setDisplay_lineWidth = 2;
+            settings.setAS_snapDistance = 20;
+            settings.setAS_guidanceLookAheadTime = 1.5;
+            settings.setAS_uTurnCompensation = 1;
+
+            settings.setVehicle_isStanleyUsed = false;
+            //mf.isStanleyUsed = false; TODO
+
+            settings.setAS_isSteerInReverse = false;
+            //mf.isSteerInReverse = false; TODO
+
+            //save current vehicle
+            //RegistrySettings.Save();
+
+            /*TODO mf.vehicle = new CVehicle(mf);
+
+            FormSteer_Load(this, e);
+
+            toSend = true; counter = 6;
+
+
+            pboxSendSteer.Visible = true;
+
+            tabControl1.SelectTab(1);
+            tabControl1.SelectTab(0);
+            tabSteerSettings.SelectTab(1);
+            tabSteerSettings.SelectTab(0);
+            */
+        }
+
         //region sensorsTab
         Item {
             visible: sensorsBtn.checked
@@ -859,12 +932,27 @@ Window{
             text: qsTr("Wizard")
             icon.source: prefix + "/images/WizardWand.png"
             Layout.alignment: Qt.AlignCenter
+            visible: false //TODO: because the wizard isn't implemented
         }
         IconButtonText{
             id: reset
-            text: qsTr("Reset to Defaults")
+            text: qsTr("Reset All To Defaults")
             icon.source: prefix + "/images/Reset_Default.png"
             Layout.alignment: Qt.AlignCenter
+            onClicked: {
+                steerMessageDialog.close()
+                steerMessageDialog.text = "Reset This Page to Defaults";
+                steerMessageDialog.title = "Are you Sure";
+                steerMessageDialog.buttons = MessageDialog.Yes | MessageDialog.No;
+
+                // Connect new handlers for this instance
+                steerMessageDialog.accepted.connect(() => {
+                                                      settingsArea.reset_all();
+
+                                                    });
+
+                steerMessageDialog.visible = true;
+            }
         }
         Text {
             text: qsTr("Send + Save")
@@ -886,5 +974,10 @@ Window{
         anchors.verticalCenter: bottomRightButtons.verticalCenter
         visible: false
         source: prefix + "/images/Config/ConSt_Mandatory.png"
+    }
+
+    MessageDialog{
+        id: steerMessageDialog
+        visible: false
     }
 }
