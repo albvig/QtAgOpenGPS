@@ -484,13 +484,13 @@ Window{
         Item{
             id: settingsWindow
             visible: settingsBtn.checked
-            anchors.centerIn: parent
+            anchors.fill: parent
             Column {
                 anchors.top: parent.top
                 anchors.topMargin: 30 * theme.scaleHeight
-                anchors.horizontalCenter: sensorsBtnsRow.horizontalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom
-                spacing: 10 * theme.scaleHeight
+                spacing: 70 * theme.scaleHeight
                 width: childrenRect.width
                 SliderCustomized{
                     //Uturn Compensation
@@ -513,14 +513,22 @@ Window{
                     onValueChanged: settings.setAS_sideHillComp = value
                 }
                 Row{
+                    spacing: 30 * theme.scaleWidth
                     IconButtonColor{
                         text: qsTr("Stanley/Pure")
                         isChecked: settings.setMenu_isPureOn
                         checkable: true
-                        onCheckedChanged: console.log(settings.setMenu_isPureOn)
+                        onCheckedChanged: settings.setMenu_isPureOn = checked
                         colorChecked: "white"
                         icon.source: prefix + "/images/ModeStanley.png"
                         iconChecked: prefix + "/images/ModePurePursuit.png"
+                    }
+                    IconButtonColor {
+                        text: qsTr("Steer In Reverse?")
+                        isChecked: settings.setAS_isSteerInReverse
+                        checkable: true
+                        onCheckedChanged: settings.setAS_isSteerInReverse = checked
+                        icon.source: prefix + "/images/Config/ConV_RevSteer.png"
                     }
                 }
             }
