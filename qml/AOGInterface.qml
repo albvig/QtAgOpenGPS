@@ -64,7 +64,7 @@ Item {
 
     property bool isContourBtnOn: false
     property bool btnIsContourLocked: false
-    property bool isAutoSteerBtnOn: false
+    property bool isBtnAutoSteerOn: false
     property bool isYouTurnBtnOn: false
 
     property bool loopbackConnected: true
@@ -72,7 +72,7 @@ Item {
     //loopbackConnected is true, unless the backend changes it to false
     onLoopbackConnectedChanged: closeAOG.open()
 //    onIsAutoSteerBtnOnChanged: {
-//        console.debug("isAutoSteerBtnOn is now in aog inface " + isAutoSteerBtnOn)
+//        console.debug("isBtnAutoSteerOn is now in aog inface " + isBtnAutoSteerOn)
 //    }
 
     //General FormGPS information updated at GPS rate.

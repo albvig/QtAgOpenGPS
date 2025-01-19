@@ -133,7 +133,7 @@ void FormGPS::setupGui()
     QMLSectionButtons::set_aog_root(qmlItem(qml_root, "aog"));
 
     //initialize interface properties
-    isAutoSteerBtnOn = false;
+    isBtnAutoSteerOn = false;
     sentenceCounter = 0;
     manualBtnState = btnStates::Off;
     autoBtnState = btnStates::Off;
@@ -599,7 +599,7 @@ void FormGPS::onBtnAutoYouTurn_clicked(){
          //new direction so reset where to put turn diagnostic
          yt.ResetCreatedYouTurn(makeUTurnCounter);
 
-         if (!isAutoSteerBtnOn) return;
+         if (!isBtnAutoSteerOn) return;
          yt.isYouTurnBtnOn = true;
          yt.isTurnCreationTooClose = false;
          yt.isTurnCreationNotCrossingError = false;
